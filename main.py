@@ -114,11 +114,25 @@ def removetask(key):
     click.echo(task)
 
 
+@click.command()
+def totalhours():
+    tasks = work_log.fetch().items
+
+    hours = 0
+    for task in tasks:
+        for key, val in task.items():
+            if key == 'Hours' and val is not None:
+                hours += val
+
+    click.echo(f"You've worked a total of {hours} hours.")
+
+
 # Register the commands
 cli.add_command(log)
 cli.add_command(clockin)
 cli.add_command(clockout)
 cli.add_command(removetask)
+cli.add_command(totalhours)
 
 
 if __name__ == '__main__':
