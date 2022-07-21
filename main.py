@@ -87,7 +87,6 @@ def clockout(task: str, key: str):
 
             task = tasks[0]
 
-
     db_task = tasks[0]
     db_task['Hours'] = round((dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)).total_seconds() / 3600, 2)
     work_log.put(db_task)
