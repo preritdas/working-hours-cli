@@ -108,10 +108,10 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 
     # Determine date
     if hours is not None and date is None:
-        time_started = dt.datetime.now(timezone) - dt.timedelta(hours=hours)
+        time_started = dt.datetime.now() - dt.timedelta(hours=hours)
         date = time_started.strftime(dt_format)
     else:
-        date = dt.datetime.now(timezone).strftime(dt_format)
+        date = dt.datetime.now().strftime(dt_format)
 
 
     work_log.put(
@@ -139,7 +139,7 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
 
     # Hours
     if hours is None:
-        time_delta = dt.datetime.now(timezone) - dt.datetime.strptime(db_task['Date'], dt_format)
+        time_delta = dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)
         hours_delta = time_delta.total_seconds() / 3600
         hours = round(hours_delta, 2)
     db_task['Hours'] = hours
