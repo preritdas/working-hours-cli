@@ -38,6 +38,18 @@ def clockin(task, hours):
     """
     task = task.lower()
 
+    # Check for multiple unfinished tasks
+    tasks = work_log.fetch(
+        {
+            "Hours": None
+        }
+    ).items
+
+    if len(tasks) > 1:
+        click.echo("You cannot start multiple unfinished tasks.")
+        return
+
+    # Store the task
     if hours is None:
         click.echo(f"Clocking in and starting the clock. Clockout with task '{task}' to close this task.")
     else:
@@ -80,7 +92,7 @@ def clockout(task: str, key: str):
                 }
             ).items
 
-            if len(tasks) == 0:
+            if len(tasks) > 0:
                 click.echo("Too many tasks found. Specify the key.")
                 print(pd.DataFrame(work_log.fetch().items))
                 return
