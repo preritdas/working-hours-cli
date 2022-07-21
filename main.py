@@ -32,11 +32,16 @@ def log():
 @click.command()
 @click.argument("task")
 @click.option('--hours', type=float)
-def clockin(task, hours):
+@click.option('--date', type=str)
+@click.option('--titlecase', type=bool)
+def clockin(task, hours, date, titlecase):
     """
     Clock in.
     """
-    task = task.lower()
+    if titlecase is None:
+        titlecase == True
+
+    task = task.title() if titlecase else task
 
     # Check for multiple unfinished tasks
     tasks = work_log.fetch(
@@ -57,7 +62,7 @@ def clockin(task, hours):
 
     work_log.put(
         {
-            "Date": dt.datetime.now().strftime(dt_format),
+            "Date": dt.datetime.now().strftime(dt_format) if date is None else date,
             "Task": task,
             "Hours": hours
         }
@@ -67,7 +72,8 @@ def clockin(task, hours):
 @click.command()
 @click.argument("task")
 @click.option('--key', type=str)
-def clockout(task: str, key: str):
+@click.option('--hours', type=float)
+def clockout(task: str, key: str, hours: float):
     """
     Clock out.
     """
@@ -92,15 +98,23 @@ def clockout(task: str, key: str):
                 }
             ).items
 
-            if len(tasks) > 0:
+            if len(tasks) >= 0:
                 click.echo("Too many tasks found. Specify the key.")
                 print(pd.DataFrame(work_log.fetch().items))
                 return
 
             task = tasks[0]
 
-    db_task = tasks[0]
-    db_task['Hours'] = round((dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)).total_seconds() / 3600, 2)
+    db_task = tasks[0] if key is None else db_task
+
+    # Hours
+    if hours is None:
+        time_delta = dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)
+        hours_delta = time_delta.total_seconds() / 3600
+        hours = round(hours_delta, 2)
+    db_task['Hours'] = hours
+
+    click.echo(f"Clocking out of {db_task['Task']} for {hours} hours.")
     work_log.put(db_task)
 
 
