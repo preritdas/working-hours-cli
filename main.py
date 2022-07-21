@@ -1,15 +1,21 @@
 # Non-local imports
 import click
-import pandas as pd; pd.options.mode.chained_assignment = None
-import numpy as np  # checking NaN values
+import pandas as pd
+import deta
 
 # local imports
 import datetime as dt
 
+# Project modules
+import _keys
+
 
 # Params
-log_file = 'work_log.csv'
 dt_format = '%Y-%m-%d %H-%M'
+
+
+# Deta
+work_log = deta.Deta(_keys.Deta.project_key).Base('work_log')
 
 
 @click.group
@@ -20,7 +26,7 @@ def cli():
 @click.command()
 def log():
     """Prints the log."""
-    click.echo(pd.read_csv(log_file))
+    print(pd.DataFrame(work_log.fetch().items))
 
 
 @click.command()
@@ -37,48 +43,54 @@ def clockin(task, hours):
     else:
         click.echo(f"Logging {task} for {hours} hours.")
 
-    new_df = pd.DataFrame(
+    work_log.put(
         {
-            "Date": [dt.datetime.now().strftime(dt_format)],
-            "Task": [task],
-            "Hours": [hours]
+            "Date": dt.datetime.now().strftime(dt_format),
+            "Task": task,
+            "Hours": hours
         }
     )
-
-    # Write to the file 
-    pd.concat((pd.read_csv(log_file), new_df)).to_csv(log_file, index=False)
 
 
 @click.command()
 @click.argument("task")
-@click.option('--index', type=int)
-def clockout(task: str, index: int):
+@click.option('--key', type=str)
+def clockout(task: str, key: str):
     """
     Clock out.
     """
-    click.echo(f"Clocking out of {task}.")
+    tasks = work_log.fetch(
+        {
+            'Task': task
+        }
+    ).items
 
-    work_log = pd.read_csv(log_file)
-    if index is not None:
-        work_log['Hours'][index] = (dt.datetime.now() - work_log['Date'][index]).hours
-        work_log.to_csv(log_file, index=False)
-        return
-
-    if len(work_log[work_log['Task'] == task]) > 1:
-        click.echo("Multiple tasks with that name were found. Specify the index and rerun the command.")
-        click.echo(work_log)
-        return
-    elif len(work_log[work_log['Task'] == task]) == 1:
-        idx = work_log.index[work_log['Task'] == task]
-        idx = idx[0]
-
-        if not np.isnan(work_log['Hours'][idx]):
-            click.echo(f"Hours for {task} have already been logged.")
-            click.echo(work_log)
+    if key is not None:
+        db_task = work_log.get(key)
+    else:
+        if len(tasks) < 1:
+            click.echo("Task not found.")
             return
+        elif len(tasks) > 1:
+            # Try to look for unfinished tasks
+            tasks = work_log.fetch(
+                {
+                    'Task': task,
+                    'Hours': None
+                }
+            ).items
 
-        work_log['Hours'][idx] = f"{((dt.datetime.now() - dt.datetime.strptime(work_log['Date'][idx], dt_format)).total_seconds() / 3600):.2f}"
-        work_log.to_csv(log_file, index=False)
+            if len(tasks) == 0:
+                click.echo("Too many tasks found. Specify the key.")
+                print(pd.DataFrame(work_log.fetch().items))
+                return
+
+            task = tasks[0]
+
+
+    db_task = tasks[0]
+    db_task['Hours'] = round((dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)).total_seconds() / 3600, 2)
+    work_log.put(db_task)
 
 
 # Register the commands
