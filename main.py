@@ -104,10 +104,18 @@ def clockout(task: str, key: str):
     work_log.put(db_task)
 
 
+@click.command()
+@click.argument("key")
+def removetask(key):
+    """Removes task with `key`."""
+    work_log.delete(key)
+
+
 # Register the commands
 cli.add_command(log)
 cli.add_command(clockin)
 cli.add_command(clockout)
+cli.add_command(removetask)
 
 
 if __name__ == '__main__':
