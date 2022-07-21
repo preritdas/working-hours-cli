@@ -108,7 +108,10 @@ def clockout(task: str, key: str):
 @click.argument("key")
 def removetask(key):
     """Removes task with `key`."""
+    task = work_log.get(key)
     work_log.delete(key)
+    click.echo(f"Removed task with key {key}.")
+    click.echo(task)
 
 
 # Register the commands
