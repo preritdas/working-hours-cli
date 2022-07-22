@@ -179,7 +179,7 @@ def pickup(task, key):
     Continue working on a pre-existing task.
     """
     db_item = _query_db(task, key)
-    if db_item is None:
+    if not db_item:
         return
 
     new_start = dt.datetime.now() - dt.timedelta(hours=db_item['Hours'])
