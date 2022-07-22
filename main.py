@@ -17,7 +17,7 @@ timezone = pytz.timezone('US/Eastern')  # doesn't do anything yet
 
 
 # Deta
-work_log = deta.Deta(_keys.Deta.project_key).Base('work_log')
+work_log = deta.Deta(_keys.Deta.project_key).Base('test')
 
 
 def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict | bool:
@@ -161,7 +161,7 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 @click.option('--key', type=str, help="Unique database key if prompted by CLI.")
 @click.option('--hours', type=float, help="Force the number of hours worked.")
 @click.option('--deliver', type=str, help="Add a deliverable item.")
-def clockout(task: str, key: str, hours: float, deliverable: str):
+def clockout(task: str, key: str, hours: float, deliver: str):
     """
     Clock out of an unfinished task.
 
@@ -190,8 +190,8 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
     db_task['Hours'] = hours
 
     # Deliverable
-    if deliverable is not None:
-        db_task['Deliverable'] = deliverable
+    if deliver is not None:
+        db_task['Deliverable'] = deliver
 
     click.echo(f"Clocking out of {db_task['Task']} for {hours} hours.")
     work_log.put(db_task)
