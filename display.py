@@ -82,4 +82,4 @@ def display_tasks(tasks: dict | list[dict], space_above: bool = True) -> None:
     if space_above:
         console.print('')
 
-    console.print(table)
+    console.print(table, justify="center" if Config.center_table else "default")

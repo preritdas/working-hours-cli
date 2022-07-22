@@ -22,3 +22,9 @@ class Config:
 
     # Ideal order
     ideal_order = config['General']['column_order'].split(',')
+
+    # Center table?
+    if config['General']['center_table'].lower() == 'true':
+        center_table = True
+    else:
+        center_table = False
