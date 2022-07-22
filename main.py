@@ -4,22 +4,11 @@ import deta  # database
 
 # local imports
 import datetime as dt  # current time and time calculations
-import configparser
-import os  # join paths
 
 # Project modules
 import _keys  # deta auth
-from display import display_tasks  # printing tasks
-
-
-# Initialize config
-class Config:
-    config = configparser.ConfigParser()
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
-    config.read(config_path)
-
-    dt_format = config['General']['dt_format']
-    database_name = config['General']['database_name']
+from display import display_tasks, console  # printing tasks
+from config import Config
 
 
 # Deta
@@ -140,9 +129,9 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 
     # Store the task
     if hours is None:
-        click.echo(f"Clocking in and starting the clock. Clockout with task '{task}' to close this task.")
+        console.print(f"Clocking in and starting the clock. Clockout with task '[blue]{task}[/blue]' to close this task.")
     else:
-        click.echo(f"Logging {task} for {hours} hours, starting {hours} hours ago.")
+        click.echo(f"Logging [blue]{task}[/blue] for [red]{hours}[/red] hours, starting [red]{hours}[/red] hours ago.")
 
     # Determine date
     if hours is not None and date is None:
@@ -198,7 +187,7 @@ def clockout(task: str, key: str, hours: float, deliver: str):
     if deliver is not None:
         db_task['Deliverable'] = deliver
 
-    click.echo(f"Clocking out of {db_task['Task']} for {hours} hours.")
+    console.print(f"Clocking out of [blue]{db_task['Task']}[/blue] for [red]{hours}[/red] hours.")
     work_log.put(db_task)
 
 
@@ -223,7 +212,7 @@ def pickup(task: str, key: str):
     db_item['Hours'] = None
 
     work_log.put(db_item)
-    click.echo(f"Continuing work on {db_item['Task']}.")
+    console.print(f"Continuing work on [blue]{db_item['Task']}[/blue].")
 
 
 @click.command()
@@ -235,12 +224,13 @@ def removetask(key):
         return
 
     work_log.delete(key)
-    click.echo(f"Removed task with key {key}.\n")
+    console.print(f"Removed task with key [red]{key}[/red].\n")
     display_tasks(task)
 
 
 @click.command()
-def totalhours():
+@click.option('--payrate', type=float, help="Your hourly wage.")
+def totalhours(payrate: float):
     """
     Calculates the total hours worked on all tasks.
     """
@@ -252,7 +242,9 @@ def totalhours():
             if key == 'Hours' and val is not None:
                 hours += val
 
-    click.echo(f"You've worked a total of {hours:,.2f} hours.")
+    console.print(f"You've worked a total of [red]{hours:,.2f}[/red] hours.")
+    if payrate is not None:
+        console.print(f"Your work has earned you [green]${(hours*payrate):,.2f}[/green].")
 
 
 @click.command()
@@ -274,7 +266,7 @@ def deliver(task: str, item: str, key: str):
     db_item['Deliverable'] = item
 
     work_log.put(db_item)
-    click.echo(f"Added deliverable {item} to {db_item['Task']}.\n")
+    console.print(f"Added deliverable [yellow]{item}[/yellow] to [blue]{db_item['Task']}[/blue].\n")
     display_tasks(db_item)
 
 
@@ -292,7 +284,7 @@ def deliverable(task: str, key: str):
     deliverable_item = db_item['Deliverable']
 
     if deliverable_item is None:
-        click.echo(f"There is no deliverable for {task}.")
+        console.print(f"There is no deliverable for [blue]{task}[/blue].")
         return
 
     click.echo(deliverable_item)
