@@ -231,7 +231,7 @@ def removetask(key):
 
     work_log.delete(key)
     click.echo(f"Removed task with key {key}.")
-    click.echo(task)
+    click.echo(pd.DataFrame(task, index=[0]))
 
 
 @click.command()
