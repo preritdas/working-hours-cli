@@ -79,7 +79,6 @@ def display_tasks(tasks: dict | list[dict]):
     
     table = Table(title="Log of Working Hours" if full_log_title else "Single Task View")
     for key in tasks[0].keys():
-        print("KEY", key)
         if key in colors:
             color = colors[key]
         else:
