@@ -5,15 +5,19 @@ import deta  # database
 # local imports
 import datetime as dt  # current time and time calculations
 import pytz  # future - make timezone specific
+import configparser
 
 # Project modules
 import _keys  # deta auth
 from display import display_tasks  # printing tasks
 
 
-# Params
-dt_format = '%Y-%m-%d %H-%M'
-timezone = pytz.timezone('US/Eastern')  # doesn't do anything yet
+# Initialize config
+class Config:
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    dt_format = config['General']['dt_format']
 
 
 # Deta
@@ -141,9 +145,9 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
     # Determine date
     if hours is not None and date is None:
         time_started = dt.datetime.now() - dt.timedelta(hours=hours)
-        date = time_started.strftime(dt_format)
+        date = time_started.strftime(Config.dt_format)
     else:
-        date = dt.datetime.now().strftime(dt_format)
+        date = dt.datetime.now().strftime(Config.dt_format)
 
 
     work_log.put(
@@ -184,7 +188,7 @@ def clockout(task: str, key: str, hours: float, deliver: str):
 
     # Hours
     if hours is None:
-        time_delta = dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)
+        time_delta = dt.datetime.now() - dt.datetime.strptime(db_task['Date'], Config.dt_format)
         hours_delta = time_delta.total_seconds() / 3600
         hours = round(hours_delta, 2)
     db_task['Hours'] = hours
@@ -214,7 +218,7 @@ def pickup(task: str, key: str):
         return
 
     new_start = dt.datetime.now() - dt.timedelta(hours=db_item['Hours'])
-    db_item['Date'] = new_start.strftime(dt_format)
+    db_item['Date'] = new_start.strftime(Config.dt_format)
     db_item['Hours'] = None
 
     work_log.put(db_item)
