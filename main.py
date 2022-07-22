@@ -5,6 +5,8 @@ import deta  # database
 # local imports
 import datetime as dt  # current time and time calculations
 import configparser
+import pathlib  # current dir for when referencing outside of current dir
+import os  # join paths
 
 # Project modules
 import _keys  # deta auth
@@ -14,7 +16,8 @@ from display import display_tasks  # printing tasks
 # Initialize config
 class Config:
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config_path = os.path.join(pathlib.Path().resolve(), 'config.ini')
+    config.read(config_path)
 
     dt_format = config['General']['dt_format']
 

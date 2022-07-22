@@ -5,12 +5,15 @@ from rich.console import Console; console = Console()
 # Local imports
 from datetime import datetime as dt
 import configparser
+import pathlib  # current dir for when referencing outside of current dir
+import os  # join paths
 
 
 # Initialize config
 class Config:
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config_path = os.path.join(pathlib.Path().resolve(), 'config.ini')
+    config.read(config_path)
 
     dt_format = config['General']['dt_format']
 
