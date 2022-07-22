@@ -1,19 +1,19 @@
 # Non-local imports
-import click
-import pandas as pd
-import deta
+import click  # cli
+import pandas as pd  # print data
+import deta  # database 
 
 # local imports
-import datetime as dt
-import pytz
+import datetime as dt  # current time and time calculations
+import pytz  # future - make timezone specific
 
 # Project modules
-import _keys
+import _keys  # deta auth
 
 
 # Params
 dt_format = '%Y-%m-%d %H-%M'
-timezone = pytz.timezone('US/Eastern')
+timezone = pytz.timezone('US/Eastern')  # doesn't do anything yet
 
 
 # Deta
@@ -92,18 +92,31 @@ def cli():
 
 @click.command()
 def log():
-    """Prints the log."""
+    """Displays a full log of all work hours."""
     print(pd.DataFrame(work_log.fetch().items))
 
 
 @click.command()
-@click.argument("task")
-@click.option('--hours', type=float)
-@click.option('--date', type=str)
-@click.option('--titlecase', type=bool, default=True)
+@click.argument("task", type=str, help="Name of the task.")
+@click.option('--hours', type=float, help="Log a completed task that took this many hours.")
+@click.option('--date', type=str, help="Force date. Use this is if you started but forgot to clock in.")
+@click.option('--titlecase', type=bool, default=True, help="Override auto titlecasing. Makes future reference harder.")
 def clockin(task: str, hours: float, date: str, titlecase: bool):
     """
-    Clock in.
+    Create a new task and clock in. 
+
+    If you provide `hours`, the task will be marked as completed with `hours` hours.
+    The date will be set to `hours` hours before the current moment, as if you forgot to
+    clock in then and are doing so after the fact.
+
+    If you provide `date`, you will override the date calculations and forcibly insert `date`.
+    The only reason to do this is if you're working on a task currently and forgot to clock in when
+    you started. You can clock in, pass in the properly formatted date representing the time you started,
+    and then clock out whenever you're finished.
+
+    If you set `titlecase` as `False`, it becomes harder to reference the task in future commands. For example,
+    if you create a task with the name "hEllo" and try to execute `deliver "hello" "deliverable"`, you'll get an error.
+    If "hEllo" was instead automatically or manually set as "Hello", the previous command would work.
     """
     # If not explicitly false, use title case
     task = task.title() if titlecase else task
@@ -144,13 +157,21 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 
 
 @click.command()
-@click.argument("task")
-@click.option('--key', type=str)
-@click.option('--hours', type=float)
-@click.option('--deliverable', type=str)
+@click.argument("task", help="Name of the task.")
+@click.option('--key', type=str, help="Unique database key if prompted by CLI.")
+@click.option('--hours', type=float, help="Force the number of hours worked.")
+@click.option('--deliver', type=str, help="Add a deliverable item.")
 def clockout(task: str, key: str, hours: float, deliverable: str):
     """
-    Clock out.
+    Clock out of an unfinished task.
+
+    Does not work on finished tasks; i.e. tasks with a finite `Hours` value.
+    
+    If you have multiple tasks of the same name, and only one of them is unfinished, 
+    clocks out of the unfinished task. 
+
+    Deliver a task directly while clocking out with --deliver. If you use --hours, the 
+    `hours` value provided is used instead of a standard calculation involding the current time.
     """
     db_task = _query_db(task, key, allow_unfinished=True)
     if not db_task:
@@ -177,11 +198,16 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
 
 
 @click.command()
-@click.argument("task", type=str)
-@click.option("--key", type=str)
-def pickup(task, key):
+@click.argument("task", type=str, help="Name of the task.")
+@click.option("--key", type=str, help="Unique database key, for use if prompted by CLI.")
+def pickup(task: str, key: str):
     """
     Continue working on a pre-existing task.
+
+    Finds a _completed_ task from the database, resets its date to `hours` hours ago,
+    and removes its `hours` value to indicate that it's unfinished. That way you can continue
+    working and clock out as normal. The resulting behavior is that you add on the extra time
+    between when you picked up the task and when you clock out again.
     """
     db_item = _query_db(task, key)
     if not db_item:
@@ -196,7 +222,7 @@ def pickup(task, key):
 
 
 @click.command()
-@click.argument("key")
+@click.argument("key", type=str, help="Unique database key.")
 def removetask(key):
     """Removes task with `key`."""
     task = _query_db("", key)
@@ -210,6 +236,9 @@ def removetask(key):
 
 @click.command()
 def totalhours():
+    """
+    Calculates the total hours worked on all tasks.
+    """
     tasks = work_log.fetch().items
 
     hours = 0
@@ -222,10 +251,17 @@ def totalhours():
 
 
 @click.command()
-@click.argument("task")
-@click.argument("item")
-@click.option('--key', type=str)
-def deliver(task, item, key):
+@click.argument("task", type=str, help="The name of the task.")
+@click.argument("item", type=str, help="Link, description, or other such deliverable.")
+@click.option('--key', type=str, help="Unique database key, for use if prompted by CLI.")
+def deliver(task: str, item: str, key: str):
+    """
+    Stores a deliverable item after you've clocked out.
+
+    Note that you don't technically have to clock out to add a deliverable.
+    And, deliverables can also be added directly when clocking out. See clockout
+    help to learn more.
+    """
     db_item = _query_db(task, key)
     if not db_item:
         return
@@ -238,9 +274,12 @@ def deliver(task, item, key):
 
 
 @click.command()
-@click.argument("task", type=str)
-@click.option('--key', type=str)
-def deliverable(task, key):
+@click.argument("task", type=str, help="The name of the task.")
+@click.option('--key', type=str, help="Unique database key, for use if prompted by CLI.")
+def deliverable(task: str, key: str):
+    """
+    View a tasks's deliverable. 
+    """
     db_item = _query_db(task, key)
     if not db_item:
         return
@@ -255,14 +294,14 @@ def deliverable(task, key):
 
 
 # Register the commands
-cli.add_command(log)
-cli.add_command(clockin)
+cli.add_command(log)  # print log
+cli.add_command(clockin)  
 cli.add_command(clockout)
-cli.add_command(pickup)
+cli.add_command(pickup)  # continue finished tasks
 cli.add_command(removetask)
 cli.add_command(totalhours)
-cli.add_command(deliver)
-cli.add_command(deliverable)
+cli.add_command(deliver)  # add deliverable
+cli.add_command(deliverable)  # view deliverable
 
 
 if __name__ == '__main__':
