@@ -153,6 +153,25 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
 
 
 @click.command()
+@click.argument("task", type=str)
+@click.option("--key", type=str)
+def pickup(task, key):
+    """
+    Continue working on a pre-existing task.
+    """
+    db_item = _query_db(task, key)
+    if db_item is None:
+        return
+
+    new_start = dt.datetime.now() - dt.timedelta(hours=db_item['Hours'])
+    db_item['Date'] = new_start.strftime(dt_format)
+    db_item['Hours'] = None
+
+    work_log.put(db_item)
+    click.echo(f"Continuing work on {db_item['Task']}.")
+
+
+@click.command()
 @click.argument("key")
 def removetask(key):
     """Removes task with `key`."""
@@ -215,6 +234,7 @@ def deliverable(task, key):
 cli.add_command(log)
 cli.add_command(clockin)
 cli.add_command(clockout)
+cli.add_command(pickup)
 cli.add_command(removetask)
 cli.add_command(totalhours)
 cli.add_command(deliver)
