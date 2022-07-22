@@ -29,13 +29,15 @@ def _reorder_dicts(tasks: dict | list[dict]):
 
         return_tasks.append({k: task[k] for k in ideal_order}) 
 
-    return return_tasks[0] if len(return_tasks) == 1 else return_tasks
+    return return_tasks
 
 
 def display_tasks(tasks: dict | list[dict]):
     """Uses rich to print a table."""
+    full_log_title = True
     if isinstance(tasks, dict):
         tasks = [tasks]
+        full_log_title = False
 
     # Re-order tasks
     tasks = _reorder_dicts(tasks)
@@ -44,7 +46,7 @@ def display_tasks(tasks: dict | list[dict]):
         console.print("Empty log.")
         return
     
-    table = Table(title="Log of Working Hours")
+    table = Table(title="Log of Working Hours" if full_log_title else "Single Task View")
     for key in tasks[0].keys():
         print("KEY", key)
         if key in colors:
