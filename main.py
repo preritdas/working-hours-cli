@@ -97,7 +97,7 @@ def log():
 
 
 @click.command()
-@click.argument("task", type=str, help="Name of the task.")
+@click.argument("task", type=str)
 @click.option('--hours', type=float, help="Log a completed task that took this many hours.")
 @click.option('--date', type=str, help="Force date. Use this is if you started but forgot to clock in.")
 @click.option('--titlecase', type=bool, default=True, help="Override auto titlecasing. Makes future reference harder.")
@@ -157,7 +157,7 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 
 
 @click.command()
-@click.argument("task", help="Name of the task.")
+@click.argument("task")
 @click.option('--key', type=str, help="Unique database key if prompted by CLI.")
 @click.option('--hours', type=float, help="Force the number of hours worked.")
 @click.option('--deliver', type=str, help="Add a deliverable item.")
@@ -198,7 +198,7 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
 
 
 @click.command()
-@click.argument("task", type=str, help="Name of the task.")
+@click.argument("task", type=str)
 @click.option("--key", type=str, help="Unique database key, for use if prompted by CLI.")
 def pickup(task: str, key: str):
     """
@@ -222,7 +222,7 @@ def pickup(task: str, key: str):
 
 
 @click.command()
-@click.argument("key", type=str, help="Unique database key.")
+@click.argument("key", type=str)
 def removetask(key):
     """Removes task with `key`."""
     task = _query_db("", key)
@@ -251,8 +251,8 @@ def totalhours():
 
 
 @click.command()
-@click.argument("task", type=str, help="The name of the task.")
-@click.argument("item", type=str, help="Link, description, or other such deliverable.")
+@click.argument("task", type=str)
+@click.argument("item", type=str)
 @click.option('--key', type=str, help="Unique database key, for use if prompted by CLI.")
 def deliver(task: str, item: str, key: str):
     """
@@ -274,7 +274,7 @@ def deliver(task: str, item: str, key: str):
 
 
 @click.command()
-@click.argument("task", type=str, help="The name of the task.")
+@click.argument("task", type=str)
 @click.option('--key', type=str, help="Unique database key, for use if prompted by CLI.")
 def deliverable(task: str, key: str):
     """
