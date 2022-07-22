@@ -171,7 +171,7 @@ def clockout(task: str, key: str, hours: float, deliver: str):
     clocks out of the unfinished task. 
 
     Deliver a task directly while clocking out with --deliver. If you use --hours, the 
-    `hours` value provided is used instead of a standard calculation involding the current time.
+    `hours` value provided is used instead of a standard calculation involving the current time.
     """
     db_task = _query_db(task, key, allow_unfinished=True)
     if not db_task:
