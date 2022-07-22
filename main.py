@@ -1,6 +1,5 @@
 # Non-local imports
 import click  # cli
-import pandas as pd  # print data
 import deta  # database 
 
 # local imports
@@ -9,6 +8,7 @@ import pytz  # future - make timezone specific
 
 # Project modules
 import _keys  # deta auth
+from display import display_tasks  # printing tasks
 
 
 # Params
@@ -61,7 +61,7 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
 
     if len(items) == 0:  # if none were found after trying title case
         click.echo("No items found. Correct the query or specify the key.")
-        click.echo(pd.DataFrame(work_log.fetch().items))
+        display_tasks(work_log.fetch().items)
         return False
 
     if len(items) > 1:
@@ -77,7 +77,7 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
                 return query_unfinished[0]
 
         click.echo("Multiple items found. Please specify the key.")
-        click.echo(pd.DataFrame(work_log.fetch().items))
+        display_tasks(work_log.fetch().items)
         return False
 
     db_item = items[0]
@@ -93,7 +93,7 @@ def cli():
 @click.command()
 def log():
     """Displays a full log of all work hours."""
-    print(pd.DataFrame(work_log.fetch().items))
+    display_tasks(work_log.fetch().items)
 
 
 @click.command()
@@ -231,7 +231,7 @@ def removetask(key):
 
     work_log.delete(key)
     click.echo(f"Removed task with key {key}.")
-    click.echo(pd.DataFrame(task, index=[0]))
+    display_tasks(task)
 
 
 @click.command()
@@ -270,7 +270,7 @@ def deliver(task: str, item: str, key: str):
 
     work_log.put(db_item)
     click.echo(f"Added deliverable {item} to {db_item['Task']}.")
-    click.echo(pd.DataFrame(db_item, index=[0]))
+    display_tasks(db_item)
 
 
 @click.command()
