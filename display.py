@@ -4,35 +4,9 @@ from rich.console import Console; console = Console()
 
 # Local imports
 from datetime import datetime as dt
-import configparser
-import os  # join paths
 
-
-# Initialize config
-class Config:
-    config = configparser.ConfigParser()
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
-    config.read(config_path)
-
-    dt_format = config['General']['dt_format']
-
-    # Show most recent tasks at the top or at the bottom. Influences _reorder_dicts
-    if config['General']['most_recent_bottom'].lower() == 'false':
-        reverse_sort = True
-    else:
-        reverse_sort = False
-
-
-# Params
-colors = {
-    'Date': '#1C96BA',
-    'Deliverable': '#EAE1C8',
-    'Hours': '#3CBCC7',
-    'Task': '#DFC39D',
-    'key': '#0C73B2'
-}
-
-ideal_order = ['Date', 'Task', 'Hours', 'Deliverable', 'key']
+# Project modules
+from config import Config 
 
 
 def _reorder_dicts(tasks: dict | list[dict]) -> list[dict]:
@@ -56,11 +30,11 @@ def _reorder_dicts(tasks: dict | list[dict]) -> list[dict]:
     return_tasks = []
     for task in tasks:
         # Check that it has all the keys
-        if any([True for key in ideal_order if key not in task]):
+        if any([True for key in Config.ideal_order if key not in task]):
             return_tasks.append(task)
             continue
 
-        return_tasks.append({k: task[k] for k in ideal_order}) 
+        return_tasks.append({k: task[k] for k in Config.ideal_order}) 
 
     return return_tasks
 
@@ -81,8 +55,8 @@ def display_tasks(tasks: dict | list[dict]):
     
     table = Table(title="Log of Working Hours" if full_log_title else "Single Task View")
     for key in tasks[0].keys():
-        if key in colors:
-            color = colors[key]
+        if key.lower() in Config.colors:  # color the columns
+            color = Config.colors[key.lower()]
         else:
             color = 'white'
 
