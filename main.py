@@ -101,7 +101,17 @@ def cli():
 @click.command()
 def log():
     """Displays a full log of all work hours."""
-    display_tasks(work_log.fetch().items)
+    items = work_log.fetch().items
+    if len(items) == 0:
+        console.print("")
+        console.print(
+            f"No [{Config.colors['task']}]tasks[/{Config.colors['task']}] "
+            "exist in the log yet."
+        )
+        console.log("")
+        return
+
+    display_tasks(items)
 
 
 @click.command()
