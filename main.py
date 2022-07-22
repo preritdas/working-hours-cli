@@ -23,9 +23,9 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
     If there was an error finding the item due to an invalid task name or invalid key,
     prints the error using click. 
 
-    If `allow_unfinished` is `True`, if there are multiple occurrences of the same task name,
-    but only one is unfinsihed, the single unfinished task will be returned without causing 
-    an error.
+    If `allow_unfinished` is `True`, if there are multiple occurrences of the same 
+    task name, but only one is unfinsihed, the single unfinished task will be 
+    returned without causing an error.
 
     Returns the item if it was found, or `False` if it wasn't, so functinos calling it
     can use `if not` syntax to determine if they should themselves `return`. 
@@ -55,7 +55,7 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
         fetch_title = True
 
     if len(items) == 0:  # if none were found after trying title case
-        click.echo("No items found. Correct the query or specify the key.\n")
+        click.echo("No items found. Correct the query or specify the key.")
         display_tasks(work_log.fetch().items)
         return False
 
@@ -71,7 +71,7 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
             if len(query_unfinished) == 1:
                 return query_unfinished[0]
 
-        click.echo("Multiple items found. Please specify the key.\n")
+        click.echo("Multiple items found. Please specify the key.")
         display_tasks(work_log.fetch().items)
         return False
 
@@ -93,9 +93,22 @@ def log():
 
 @click.command()
 @click.argument("task", type=str)
-@click.option('--hours', type=float, help="Log a completed task that took this many hours.")
-@click.option('--date', type=str, help="Force date. Use this is if you started but forgot to clock in.")
-@click.option('--titlecase', type=bool, default=True, help="Override auto titlecasing. Makes future reference harder.")
+@click.option(
+    '--hours', 
+    type = float, 
+    help = "Log a completed task that took this many hours."
+)
+@click.option(
+    '--date', 
+    type = str, 
+    help = "Force date. Use this is if you started but forgot to clock in."
+)
+@click.option(
+    '--titlecase', 
+    type = bool, 
+    default = True, 
+    help="Override auto titlecasing. Makes future reference harder."
+)
 def clockin(task: str, hours: float, date: str, titlecase: bool):
     """
     Create a new task and clock in. 
@@ -104,14 +117,16 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
     The date will be set to `hours` hours before the current moment, as if you forgot to
     clock in then and are doing so after the fact.
 
-    If you provide `date`, you will override the date calculations and forcibly insert `date`.
-    The only reason to do this is if you're working on a task currently and forgot to clock in when
-    you started. You can clock in, pass in the properly formatted date representing the time you started,
-    and then clock out whenever you're finished.
+    If you provide `date`, you will override the date calculations and forcibly 
+    insert `date`. The only reason to do this is if you're working on a task currently
+    and forgot to clock in when you started. You can clock in, pass in the properly 
+    formatted date representing the time you started, and then clock out whenever 
+    you're finished.
 
-    If you set `titlecase` as `False`, it becomes harder to reference the task in future commands. For example,
-    if you create a task with the name "hEllo" and try to execute `deliver "hello" "deliverable"`, you'll get an error.
-    If "hEllo" was instead automatically or manually set as "Hello", the previous command would work.
+    If you set `titlecase` as `False`, it becomes harder to reference the task in 
+    future commands. For example, if you create a task with the name "hEllo" and try 
+    to execute `deliver "hello" "deliverable"`, you'll get an error. If "hEllo" was 
+    instead automatically or manually set as "Hello", the previous command would work.
     """
     # If not explicitly false, use title case
     task = task.title() if titlecase else task
@@ -129,9 +144,19 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 
     # Store the task
     if hours is None:
-        console.print(f"Clocking in and starting the clock. Clockout with task '[blue]{task}[/blue]' to close this task.")
+        console.print(
+            f"Clocking in and starting the clock. "
+            f"Clockout with task "
+            f"'[{Config.colors['task']}]{task}[/{Config.colors['task']}]' "
+            "to close this task."
+        )
     else:
-        click.echo(f"Logging [blue]{task}[/blue] for [red]{hours}[/red] hours, starting [red]{hours}[/red] hours ago.")
+        console.print(
+            f"Logging [{Config.colors['task']}]{task}[/{Config.colors['task']}] for "
+            f"[{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] hours, "
+            f"starting [{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] "
+            "hours ago."
+        )
 
     # Determine date
     if hours is not None and date is None:
@@ -165,7 +190,8 @@ def clockout(task: str, key: str, hours: float, deliver: str):
     clocks out of the unfinished task. 
 
     Deliver a task directly while clocking out with --deliver. If you use --hours, the 
-    `hours` value provided is used instead of a standard calculation involving the current time.
+    `hours` value provided is used instead of a standard calculation involving the 
+    current time.
     """
     db_task = _query_db(task, key, allow_unfinished=True)
     if not db_task:
@@ -178,7 +204,10 @@ def clockout(task: str, key: str, hours: float, deliver: str):
 
     # Hours
     if hours is None:
-        time_delta = dt.datetime.now() - dt.datetime.strptime(db_task['Date'], Config.dt_format)
+        time_delta = (
+            dt.datetime.now() - \
+                dt.datetime.strptime(db_task['Date'], Config.dt_format)
+        )
         hours_delta = time_delta.total_seconds() / 3600
         hours = round(hours_delta, 2)
     db_task['Hours'] = hours
@@ -187,21 +216,26 @@ def clockout(task: str, key: str, hours: float, deliver: str):
     if deliver is not None:
         db_task['Deliverable'] = deliver
 
-    console.print(f"Clocking out of [blue]{db_task['Task']}[/blue] for [red]{hours}[/red] hours.")
+    console.print(
+        f"Clocking out of "
+        f"[{Config.colors['task']}]{db_task['Task']}[/{Config.colors['task']}] "
+        f"for [{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] hours.")
+
     work_log.put(db_task)
 
 
 @click.command()
 @click.argument("task", type=str)
-@click.option("--key", type=str, help="Unique database key, for use if prompted by CLI.")
+@click.option("--key", type=str, help="Unique database key for use if prompted by CLI.")
 def pickup(task: str, key: str):
     """
     Continue working on a pre-existing task.
 
     Finds a _completed_ task from the database, resets its date to `hours` hours ago,
-    and removes its `hours` value to indicate that it's unfinished. That way you can continue
-    working and clock out as normal. The resulting behavior is that you add on the extra time
-    between when you picked up the task and when you clock out again.
+    and removes its `hours` value to indicate that it's unfinished. That way you 
+    can continue working and clock out as normal. The resulting behavior is that you 
+    add on the extra time between when you picked up the task and when you 
+    clock out again.
     """
     db_item = _query_db(task, key)
     if not db_item:
@@ -212,7 +246,10 @@ def pickup(task: str, key: str):
     db_item['Hours'] = None
 
     work_log.put(db_item)
-    console.print(f"Continuing work on [blue]{db_item['Task']}[/blue].")
+    console.print(
+        f"Continuing work on "
+        f"[{Config.colors['task']}]{db_item['Task']}[/{Config.colors['task']}]."
+    )
 
 
 @click.command()
@@ -224,7 +261,9 @@ def removetask(key):
         return
 
     work_log.delete(key)
-    console.print(f"Removed task with key [red]{key}[/red].\n")
+    console.print(
+        f"Removed task with key [{Config.colors['key']}]{key}[/{Config.colors['key']}]."
+    )
     display_tasks(task)
 
 
@@ -242,15 +281,21 @@ def totalhours(payrate: float):
             if key == 'Hours' and val is not None:
                 hours += val
 
-    console.print(f"You've worked a total of [red]{hours:,.2f}[/red] hours.")
+    console.print(
+        f"You've worked a total of "
+        f"[{Config.colors['hours']}]{hours:,.2f}[/{Config.colors['hours']}] hours."
+    )
     if payrate is not None:
-        console.print(f"Your work has earned you [green]${(hours*payrate):,.2f}[/green].")
+        console.print(
+            f"Your work has earned you "
+            f"[green]${(hours*payrate):,.2f}[/green]."  # no need to source config
+        )
 
 
 @click.command()
 @click.argument("task", type=str)
 @click.argument("item", type=str)
-@click.option('--key', type=str, help="Unique database key, for use if prompted by CLI.")
+@click.option('--key', type=str, help="Unique database key for use if prompted by CLI.")
 def deliver(task: str, item: str, key: str):
     """
     Stores a deliverable item after you've clocked out.
@@ -266,7 +311,11 @@ def deliver(task: str, item: str, key: str):
     db_item['Deliverable'] = item
 
     work_log.put(db_item)
-    console.print(f"Added deliverable [yellow]{item}[/yellow] to [blue]{db_item['Task']}[/blue].\n")
+    console.print(
+        f"Added deliverable "
+        f"[{Config.colors['deliverable']}]{item}[/{Config.colors['deliverable']}] "
+        f"to [{Config.colors['task']}]{db_item['Task']}[/{Config.colors['task']}]."
+    )
     display_tasks(db_item)
 
 
@@ -284,7 +333,10 @@ def deliverable(task: str, key: str):
     deliverable_item = db_item['Deliverable']
 
     if deliverable_item is None:
-        console.print(f"There is no deliverable for [blue]{task}[/blue].")
+        console.print(
+            f"There is no deliverable for "
+            f"[{Config.colors['task']}]{task}[/{Config.colors['task']}]."
+        )
         return
 
     click.echo(deliverable_item)
