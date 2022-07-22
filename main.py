@@ -355,8 +355,9 @@ def deliver(task: str, item: str, key: str):
         return
 
     db_item['Deliverable'] = item
-
     work_log.put(db_item)
+
+    console.print("")
     console.print(
         f"Added deliverable "
         f"[{Config.colors['deliverable']}]{item}[/{Config.colors['deliverable']}] "
