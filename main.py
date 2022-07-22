@@ -59,7 +59,12 @@ def _query_db(
         fetch_title = True
 
     if len(items) == 0:  # if none were found after trying title case
-        click.echo("No items found. Correct the query or specify the key.")
+        console.print("")
+        console.print(
+            "No items found. "
+            f"Correct the [{Config.colors['task']}]query[/{Config.colors['task']}] "
+            f"or specify the [{Config.colors['key']}]key[/{Config.colors['key']}]."
+        )
         display_tasks(work_log.fetch().items)
         return False
 
@@ -75,6 +80,7 @@ def _query_db(
             if len(query_unfinished) == 1:
                 return query_unfinished[0]
 
+        console.print("")
         console.print(
             "Multiple items found. "
             f"Please specify the [{Config.colors['key']}]key[/{Config.colors['key']}]."
@@ -146,11 +152,16 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
     ).items
 
     if len(tasks) > 0:
-        click.echo("You cannot start multiple unfinished tasks.")
+        console.print("")
+        console.print(
+            "You cannot start multiple unfinished "
+            f"[{Config.colors['task']}]tasks[/{Config.colors['task']}]."
+        )
         return
 
     # Store the task
     if hours is None:
+        console.print("")
         console.print(
             f"Clocking in and starting the clock. "
             f"Clockout with task "
@@ -158,6 +169,7 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
             "to close this task."
         )
     else:
+        console.print("")
         console.print(
             f"Logging [{Config.colors['task']}]{task}[/{Config.colors['task']}] for "
             f"[{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] hours, "
@@ -180,6 +192,8 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
             "Deliverable": None
         }
     )
+
+    console.print("")
 
 
 @click.command()
@@ -206,7 +220,12 @@ def clockout(task: str, key: str, hours: float, deliver: str):
 
     # Disallow if task has been completed
     if db_task['Hours'] is not None:
-        click.echo("You cannot clock out of a task that's been already completed.")
+        console.print("")
+        console.print(
+            "You cannot clock out of a "
+            f"[{Config.colors['task']}]task[/{Config.colors['task']}] "
+            "that has already been completed."
+        )
         return
 
     # Hours
@@ -223,12 +242,15 @@ def clockout(task: str, key: str, hours: float, deliver: str):
     if deliver is not None:
         db_task['Deliverable'] = deliver
 
+    console.print("")
     console.print(
         f"Clocking out of "
         f"[{Config.colors['task']}]{db_task['Task']}[/{Config.colors['task']}] "
         f"for [{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] hours.")
 
     work_log.put(db_task)
+
+    console.print("")
 
 
 @click.command()
@@ -253,10 +275,13 @@ def pickup(task: str, key: str):
     db_item['Hours'] = None
 
     work_log.put(db_item)
+    console.print("")
     console.print(
         f"Continuing work on "
         f"[{Config.colors['task']}]{db_item['Task']}[/{Config.colors['task']}]."
     )
+
+    console.print("")
 
 
 @click.command()
@@ -268,6 +293,7 @@ def removetask(key):
         return
 
     work_log.delete(key)
+    console.print("")
     console.print(
         f"Removed task with key [{Config.colors['key']}]{key}[/{Config.colors['key']}]."
     )
@@ -288,6 +314,7 @@ def totalhours(payrate: float):
             if key == 'Hours' and val is not None:
                 hours += val
 
+    console.print("")
     console.print(
         f"You've worked a total of "
         f"[{Config.colors['hours']}]{hours:,.2f}[/{Config.colors['hours']}] hours."
@@ -297,6 +324,8 @@ def totalhours(payrate: float):
             f"Your work has earned you "
             f"[green]${(hours*payrate):,.2f}[/green]."  # no need to source config
         )
+
+    console.print("")
 
 
 @click.command()
@@ -337,16 +366,24 @@ def deliverable(task: str, key: str):
     if not db_item:
         return
 
-    deliverable_item = db_item['Deliverable']
+    deliverable_item: str = db_item['Deliverable']
 
     if deliverable_item is None:
+        console.print("")
         console.print(
-            f"There is no deliverable for "
+            "There is no "
+            f"[{Config.colors['deliverable']}]deliverable[/{Config.colors['deliverable']}] "
+            "for "
             f"[{Config.colors['task']}]{task}[/{Config.colors['task']}]."
         )
         return
 
-    click.echo(deliverable_item)
+    console.print("")
+    console.print(
+        f"[{Config.colors['deliverable']}]{deliverable_item}"
+        f"[/{Config.colors['deliverable']}]"  # end the rich color tag
+    )
+    console.print("")
 
 
 # Register the commands
