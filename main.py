@@ -17,7 +17,7 @@ timezone = pytz.timezone('US/Eastern')  # doesn't do anything yet
 
 
 # Deta
-work_log = deta.Deta(_keys.Deta.project_key).Base('test')
+work_log = deta.Deta(_keys.Deta.project_key).Base('work_log')
 
 
 def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict | bool:
