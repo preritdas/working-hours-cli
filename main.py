@@ -108,7 +108,7 @@ def log():
             f"No [{Config.colors['task']}]tasks[/{Config.colors['task']}] "
             "exist in the log yet."
         )
-        console.log("")
+        console.print("")
         return
 
     display_tasks(items)
