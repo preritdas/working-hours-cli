@@ -10,7 +10,11 @@ from config import Config
 
 
 def _reorder_dicts(tasks: dict | list[dict]) -> list[dict]:
-    """`tasks` can be a single dict or list of dicts."""
+    """
+    `tasks` can be a single dict or list of dicts. But, regardless
+    of whether a dict or list of dicts was passed, a list of dicts is returned.
+    So, if you pass in a single dict, a list is returned containing one dict.
+    """
     if isinstance(tasks, dict):
         tasks = [tasks]
     
@@ -39,8 +43,11 @@ def _reorder_dicts(tasks: dict | list[dict]) -> list[dict]:
     return return_tasks
 
 
-def display_tasks(tasks: dict | list[dict]):
-    """Uses rich to print a table."""
+def display_tasks(tasks: dict | list[dict], space_above: bool = True) -> None:
+    """
+    Uses rich to print a table of tasks. If `space_above` is not passed in as 
+    `True`, doesn't prints a blank line before printing the table to provide room.
+    """
     full_log_title = True
     if isinstance(tasks, dict):
         tasks = [tasks]
@@ -66,4 +73,8 @@ def display_tasks(tasks: dict | list[dict]):
         str_vals = (str(val) for val in task.values())
         table.add_row(*str_vals)
     
+    # Display the results
+    if space_above:
+        console.print('')
+
     console.print(table)
