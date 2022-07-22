@@ -5,7 +5,7 @@ An extremely simple-to-use command-line interface built to remove the stress of 
 
 See the CLI in action...
 
-[![asciicast](https://asciinema.org/a/r2nB2goFnWbXVCgZdNz58tOca.svg)](https://asciinema.org/a/r2nB2goFnWbXVCgZdNz58tOca)
+[![asciicast](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq.svg)](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq)
 
 ## Deployment
 
