@@ -17,16 +17,20 @@ timezone = pytz.timezone('US/Eastern')
 
 
 # Deta
-work_log = deta.Deta(_keys.Deta.project_key).Base('work_log')
+work_log = deta.Deta(_keys.Deta.project_key).Base('test')
 
 
-def _query_db(task: str, key: str = None) -> dict | bool:
+def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict | bool:
     """
     Checks the database for an item matching the task name, the task title,
     or using the key directly if it's provided. 
 
     If there was an error finding the item due to an invalid task name or invalid key,
     prints the error using click. 
+
+    If `allow_unfinished` is `True`, if there are multiple occurrences of the same task name,
+    but only one is unfinsihed, the single unfinished task will be returned without causing 
+    an error.
 
     Returns the item if it was found, or `False` if it wasn't, so functinos calling it
     can use `if not` syntax to determine if they should themselves `return`. 
@@ -36,32 +40,47 @@ def _query_db(task: str, key: str = None) -> dict | bool:
         if not db_item:
             click.echo("Invalid key. Try again.")
             return False
-    else:
+        else:
+            return db_item
+
+    fetch_title = False
+    items = work_log.fetch(
+        {
+            'Task': task
+        }
+    ).items
+
+    # Try looking for tasks with title case
+    if len(items) == 0:
         items = work_log.fetch(
             {
-                'Task': task
+                'Task': task.title()
             }
         ).items
+        fetch_title = True
 
-        if len(items) == 0:
-            # Try looking for tasks with title case
-            items = work_log.fetch(
+    if len(items) == 0:  # if none were found after trying title case
+        click.echo("No items found. Correct the query or specify the key.")
+        click.echo(pd.DataFrame(work_log.fetch().items))
+        return False
+
+    if len(items) > 1:
+        if allow_unfinished:
+            # Check if only one is unfinished
+            query_unfinished = work_log.fetch(
                 {
-                    'Task': task.title()
+                    'Task': task.title() if fetch_title else task,
+                    'Hours': None
                 }
             ).items
+            if len(query_unfinished) == 1:
+                return query_unfinished[0]
 
-            if len(items) == 0:  # if none were found after trying title case
-                click.echo("No items found. Correct the query or specify the key.")
-                click.echo(pd.DataFrame(work_log.fetch().items))
-                return False
+        click.echo("Multiple items found. Please specify the key.")
+        click.echo(pd.DataFrame(work_log.fetch().items))
+        return False
 
-            elif len(items) > 1:
-                click.echo("Multiple items found. Please specify the key.")
-                click.echo(pd.DataFrame(work_log.fetch().items))
-                return False
-
-        db_item = items[0]
+    db_item = items[0]
 
     return db_item
 
@@ -133,7 +152,7 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
     """
     Clock out.
     """
-    db_task = _query_db(task, key)
+    db_task = _query_db(task, key, allow_unfinished=True)
     if not db_task:
         return
 
