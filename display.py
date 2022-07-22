@@ -70,6 +70,12 @@ def display_tasks(tasks: dict | list[dict], space_above: bool = True) -> None:
         table.add_column(key, style=color)
     
     for task in tasks:
+        # Add emojis to none objects
+        if not task['Hours']:
+            task['Hours'] = ':clock1:'
+        if not task['Deliverable']:
+            task['Deliverable'] = ':x:'
+
         str_vals = (str(val) for val in task.values())
         table.add_row(*str_vals)
     
