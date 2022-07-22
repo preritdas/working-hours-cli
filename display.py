@@ -1,7 +1,25 @@
+# Non-local imports
 from rich.table import Table
-from rich.console import Console
+from rich.console import Console; console = Console()
 
-console = Console()
+# Local imports
+from datetime import datetime as dt
+import configparser
+
+
+# Initialize config
+class Config:
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    dt_format = config['General']['dt_format']
+
+    # Show most recent tasks at the top or at the bottom. Influences _reorder_dicts
+    if config['General']['most_recent_bottom'].lower() == 'false':
+        reverse_sort = True
+    else:
+        reverse_sort = False
+
 
 # Params
 colors = {
@@ -15,11 +33,24 @@ colors = {
 ideal_order = ['Date', 'Task', 'Hours', 'Deliverable', 'key']
 
 
-def _reorder_dicts(tasks: dict | list[dict]):
+def _reorder_dicts(tasks: dict | list[dict]) -> list[dict]:
     """`tasks` can be a single dict or list of dicts."""
     if isinstance(tasks, dict):
         tasks = [tasks]
+    
+    # Sort the list by date
+    dates = [(idx, dt.strptime(task["Date"], Config.dt_format)) for idx, task in enumerate(tasks)]
+    sorted_dates = sorted(dates, key=lambda x: x[1], reverse=Config.reverse_sort)
+    sorted_idx = (tup[0] for tup in sorted_dates)
 
+    # Store the results
+    new_tasks = []
+    for idx in sorted_idx:
+        new_tasks.append(tasks[idx])
+
+    tasks = new_tasks  # overwrite the old tasks
+
+    # Reorder keys in all the dicts
     return_tasks = []
     for task in tasks:
         # Check that it has all the keys
