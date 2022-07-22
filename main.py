@@ -4,7 +4,6 @@ import deta  # database
 
 # local imports
 import datetime as dt  # current time and time calculations
-import pytz  # future - make timezone specific
 import configparser
 
 # Project modules
