@@ -19,10 +19,11 @@ class Config:
     config.read(config_path)
 
     dt_format = config['General']['dt_format']
+    database_name = config['General']['database_name']
 
 
 # Deta
-work_log = deta.Deta(_keys.Deta.project_key).Base('work_log')
+work_log = deta.Deta(_keys.Deta.project_key).Base(database_name)
 
 
 def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict | bool:
