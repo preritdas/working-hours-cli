@@ -43,7 +43,7 @@ def _query_db(task: str, key: str = None) -> dict | bool:
             }
         ).items
 
-        if len(items) != 0:
+        if len(items) == 0:
             # Try looking for tasks with title case
             items = work_log.fetch(
                 {
@@ -56,10 +56,10 @@ def _query_db(task: str, key: str = None) -> dict | bool:
                 click.echo(pd.DataFrame(work_log.fetch().items))
                 return False
 
-        elif len(items) > 1:
-            click.echo("Multiple items found. Please specify the key.")
-            click.echo(pd.DataFrame(work_log.fetch().items))
-            return False
+            elif len(items) > 1:
+                click.echo("Multiple items found. Please specify the key.")
+                click.echo(pd.DataFrame(work_log.fetch().items))
+                return False
 
         db_item = items[0]
 
