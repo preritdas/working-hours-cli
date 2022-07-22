@@ -64,7 +64,7 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
         fetch_title = True
 
     if len(items) == 0:  # if none were found after trying title case
-        click.echo("No items found. Correct the query or specify the key.")
+        click.echo("No items found. Correct the query or specify the key.\n")
         display_tasks(work_log.fetch().items)
         return False
 
@@ -80,7 +80,7 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
             if len(query_unfinished) == 1:
                 return query_unfinished[0]
 
-        click.echo("Multiple items found. Please specify the key.")
+        click.echo("Multiple items found. Please specify the key.\n")
         display_tasks(work_log.fetch().items)
         return False
 
@@ -234,7 +234,7 @@ def removetask(key):
         return
 
     work_log.delete(key)
-    click.echo(f"Removed task with key {key}.")
+    click.echo(f"Removed task with key {key}.\n")
     display_tasks(task)
 
 
@@ -273,7 +273,7 @@ def deliver(task: str, item: str, key: str):
     db_item['Deliverable'] = item
 
     work_log.put(db_item)
-    click.echo(f"Added deliverable {item} to {db_item['Task']}.")
+    click.echo(f"Added deliverable {item} to {db_item['Task']}.\n")
     display_tasks(db_item)
 
 
