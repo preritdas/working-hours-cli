@@ -56,8 +56,7 @@ def display_tasks(tasks: dict | list[dict], space_above: bool = True) -> None:
     # Re-order tasks
     tasks = _reorder_dicts(tasks)
 
-    if not tasks[0]:
-        console.print("Empty log.")
+    if len(tasks) == 0:  # this should never actually trigger but just in case.
         return
     
     table = Table(title="Log of Working Hours" if full_log_title else "Single Task View")
