@@ -150,7 +150,6 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
     else:
         date = dt.datetime.now().strftime(Config.dt_format)
 
-
     work_log.put(
         {
             "Date": date,
