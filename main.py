@@ -156,6 +156,11 @@ def clockout(task: str, key: str, hours: float, deliverable: str):
     if not db_task:
         return
 
+    # Disallow if task has been completed
+    if db_task['Hours'] is not None:
+        click.echo("You cannot clock out of a task that's been already completed.")
+        return
+
     # Hours
     if hours is None:
         time_delta = dt.datetime.now() - dt.datetime.strptime(db_task['Date'], dt_format)
