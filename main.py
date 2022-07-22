@@ -247,7 +247,7 @@ def totalhours():
             if key == 'Hours' and val is not None:
                 hours += val
 
-    click.echo(f"You've worked a total of {hours} hours.")
+    click.echo(f"You've worked a total of {hours:,.2f} hours.")
 
 
 @click.command()
