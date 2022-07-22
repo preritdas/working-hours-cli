@@ -15,7 +15,11 @@ from config import Config
 work_log = deta.Deta(_keys.Deta.project_key).Base(Config.database_name)
 
 
-def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict | bool:
+def _query_db(
+    task: str, 
+    key: str = None, 
+    allow_unfinished: bool = False
+) -> dict | bool:
     """
     Checks the database for an item matching the task name, the task title,
     or using the key directly if it's provided. 
@@ -71,7 +75,10 @@ def _query_db(task: str, key: str = None, allow_unfinished: bool = True) -> dict
             if len(query_unfinished) == 1:
                 return query_unfinished[0]
 
-        click.echo("Multiple items found. Please specify the key.")
+        console.print(
+            "Multiple items found. "
+            f"Please specify the [{Config.colors['key']}]key[/{Config.colors['key']}]."
+        )
         display_tasks(work_log.fetch().items)
         return False
 
