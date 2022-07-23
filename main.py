@@ -180,7 +180,7 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
             f"'[{Config.colors['task']}]{task}[/{Config.colors['task']}]' "
             "to close this task."
         )
-    else:
+    elif hours is not None and date is None:
         console.print("")
         console.print(
             f"Logging [{Config.colors['task']}]{task}[/{Config.colors['task']}] for "
@@ -188,6 +188,15 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
             f"starting [{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] "
             "hours ago."
         )
+    elif hours is not None and date is not None:
+        console.print("")
+        console.print(
+            f"Logging [{Config.colors['task']}]{task}[/{Config.colors['task']}] for "
+            f"[{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] hours, "
+            f"starting at [{Config.colors['date']}]{date}[/{Config.colors['date']}]. "
+        )
+    else:
+        raise Exception("Don't know what to do in this case.")
 
     # Determine date
     if date is None:
