@@ -6,7 +6,7 @@ import datetime as dt
 import os
 
 
-def export_tasks(tasks: list[dict]) -> None:
+def export_tasks(tasks: list[dict]) -> str:
     """
     Takes a list of tasks (dicts) and exports them to a CSV.
     
@@ -19,3 +19,5 @@ def export_tasks(tasks: list[dict]) -> None:
     month, year = dt.datetime.now().month, dt.datetime.now().year
     path = os.path.join(os.getcwd(), f"Work Log {month}-{year}.csv")
     df.to_csv(path)
+
+    return path
