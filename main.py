@@ -192,6 +192,7 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
             "You cannot start multiple unfinished "
             f"[{Config.colors['task']}]tasks[/{Config.colors['task']}]."
         )
+        console.print("")
         return
 
     # Store the task
