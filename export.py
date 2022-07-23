@@ -43,9 +43,12 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     data = [list(tasks[0].keys())]
     appendix_count = 0
     appendix = {}
+    hours_total = 0
     for task in tasks:
         # Stringify and shorten length items
         for key, val in task.items():
+            if key == 'Hours':
+                hours_total += val
             str_val = str(val)
             if len(str_val) > Config.report_char_cutoff:
                 appendix_count += 1
@@ -82,15 +85,19 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     pdf.ln()
 
     pdf.ln()
-    pdf.create_table(data, "Hours Logged", cell_width=[30, 50, 15, 93])
+    pdf.create_table(
+        table_data = data, 
+        title = f"Total Hours Logged: {hours_total:,.2f}",
+        cell_width = [30, 50, 15, 93]
+    )
     pdf.ln()
 
     # Deliverables appendix
     if appendix:
         pdf.set_font(Config.report_font, size = 14)
         pdf.cell(
-            txt="Appendix of Deliverables",
-            align='L' 
+            txt = "Appendix of Deliverables",
+            align = 'L' 
         )
         pdf.ln()
         pdf.ln()
