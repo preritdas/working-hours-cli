@@ -1,5 +1,6 @@
 import configparser
 import os  # join paths
+import datetime as dt
 
 
 # Initialize config
@@ -9,7 +10,6 @@ class Config:
     config.read(config_path)
 
     dt_format = config['General']['dt_format']
-    database_name = config['General']['database_name']
 
     # Show most recent tasks at the top or at the bottom. Influences _reorder_dicts
     if config['General']['most_recent_bottom'].lower() == 'false':
@@ -28,3 +28,7 @@ class Config:
         center_table = True
     else:
         center_table = False
+
+    # Database name by month
+    month, year = dt.datetime.now().month, dt.datetime.now().year
+    current_db = config['General']['database_name'] + f"_{month}_{year}"

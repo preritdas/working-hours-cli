@@ -12,7 +12,7 @@ from config import Config
 
 
 # Deta
-work_log = deta.Deta(_keys.Deta.project_key).Base(Config.database_name)
+work_log = deta.Deta(_keys.Deta.project_key).Base(Config.current_db)
 
 
 def _query_db(
