@@ -8,6 +8,7 @@ import os
 from config import Config
 from pdfclass import PDF
 from display import _reorder_dicts
+from bitly import _bitly
 
 
 def export_tasks(tasks: list[dict], monthyear: str) -> str:
@@ -46,10 +47,10 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
         # Stringify and shorten length items
         for key, val in task.items():
             str_val = str(val)
-            if len(str_val) > 50:
+            if len(str_val) > Config.report_char_cutoff:
                 appendix_count += 1
                 appendix[appendix_count] = str_val
-                str_val = f"A{appendix_count}: " + str_val[:50] + '...'
+                str_val = f"A{appendix_count}: " + str_val[:Config.report_char_cutoff] + '...'
             task[key] = str_val
 
         data.append(list(task.values()))
@@ -60,7 +61,7 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     pdf.set_font(Config.report_font, size=15)
 
     # Titles
-    pdf.cell(200, 10, f"Log of Working Hours {monthyear}", align='C')
+    pdf.cell(200, 10, txt=f"Log of Working Hours {monthyear}", align='C')
     pdf.ln()
     pdf.ln()
 
@@ -68,16 +69,15 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     pdf.set_font("Times", size=11)
 
     pdf.cell(
-        200, 
-        10,
-        f"The following is a report of all hours logged in the month of {monthyear}. "
+        txt=(
+            "The following is an automatically generated report of all hours logged "
+            f"in the month of {monthyear}. "
+        )
     )
     pdf.ln()
 
     pdf.cell(
-        200, 
-        10, 
-        "Any deliverables cut off for length reasons can be seen in full in the appendix."
+        txt="Any deliverables cut off for length reasons can be seen in full in the appendix."
     )
     pdf.ln()
 
@@ -88,15 +88,40 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     # Deliverables appendix
     pdf.set_font(Config.report_font, size = 13)
     pdf.cell(
-        200,
-        10,
-        "Appendix of Deliverables",
+        txt="Appendix of Deliverables",
         align='L' 
     )
     pdf.ln()
+    pdf.ln()
 
+    pdf.set_font(Config.report_font, size = 10)
+
+    pdf.cell(txt="Some of the following items have been interpreted as links.")
+    pdf.cell(txt="They've been shortened below using bit.ly.")
+    pdf.ln()
+    pdf.ln()
+    pdf.ln()
+
+    pdf.set_font(Config.report_font, size = 11)
+    # Links
     for idx, deliverable in appendix.items():
-        pass
-    
+        pdf.cell(txt=f"Item A{idx}")
+
+        if 'http' in deliverable:
+            pdf.ln()
+            pdf.cell(txt=_bitly(deliverable))
+        else:
+            if len(deliverable) < 100:
+                pdf.ln()
+                pdf.cell(txt=deliverable)
+            else:
+                pdf.set_font(Config.report_font, size = 9)
+                pdf.cell(txt="(The full deliverable is too long to be displayed. Part of it is shown below.)")
+                pdf.set_font(Config.report_font, size = 11)
+                pdf.ln()
+                pdf.cell(txt=deliverable[:100]+'...')
+
+        pdf.ln()
+        pdf.ln()
 
     pdf.output(path)
