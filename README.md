@@ -23,7 +23,7 @@ I deployed the CLI above using a script called `loghours`...
 python3.10 "/home/path/to/Working Hours CLI/main.py" "$@"
 ```
 
-I then added the script's directory to $PATH, and gave it executable permissions with `chmod +x loghours`. This allows me to call it like a professional CLI application from anywhere in the system, with the `loghours` command. All arguments passed to `loghours`, such as `loghours clockin "this or that" --hours 2`, are passed individually to the Python script thanks to the script above.
+I then added the script's directory to $PATH and gave it executable permissions with `chmod +x loghours`. This allows me to call it like a professional CLI application from anywhere in the system, with the `loghours` command. All arguments passed to `loghours`, such as `loghours clockin "this or that" --hours 2`, are passed individually to the Python script thanks to the script above.
 
 
 ## Usage and Behavior
@@ -32,10 +32,11 @@ The CLI interacts with a Deta database whose credentials are supplied by a proje
 
 A separate database is automatically created and used for every month. This allows you to generate PDF reports for any current or historical month. 
 
-Whenever a new item is added to the database, using `clockin`, the item is assigned a completely unique random string `key`. If you try to run a command (ex. `deliverable "a task"` to view the deliverable of task "a task," and there are multiple tasks named "a task," the CLI will print all items (including their keys) and prompt you to rerun the command but append `--key KEY`, where KEY is the key printed beside the name of an item. 
+Whenever a new item is added to the database, using `clockin`, the item is assigned a unique random string `key`. If you try to run a command (ex. `deliverable "a task"` to view the deliverable of task "a task," and there are multiple tasks named "a task," the CLI will print all items (including their keys) and prompt you to rerun the command but append `--key KEY`, where KEY is the key printed beside the name of an item. 
 
 In the specific circumstance that you're clocking out of a task whose name is shared by other tasks, if only one occurrence of all the tasks with that name is _unfinished_, you'll automatically be clocked out of that unfinished task, without the need for manually providing a `key` as explained above. 
 
+Similarly, if you try to add a delivery to a duplicate task, if only one of the duplicates is incomplete (hasn't been clocked out), instead of prompting you to provide a key, it'll deliver to that task automatically. 
 
 ## Commands
 
