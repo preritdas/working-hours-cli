@@ -30,6 +30,8 @@ I then added the script's directory to $PATH, and gave it executable permissions
 
 The CLI interacts with a Deta database whose credentials are supplied by a project key provided in `_keys.py` (see [`_keys (sample).py`](_keys%20(sample).py)), in the same directory as `main.py`. 
 
+A separate database is automatically created and used for every month. This allows you to generate PDF reports for any current or historical month. 
+
 Whenever a new item is added to the database, using `clockin`, the item is assigned a completely unique random string `key`. If you try to run a command (ex. `deliverable "a task"` to view the deliverable of task "a task," and there are multiple tasks named "a task," the CLI will print all items (including their keys) and prompt you to rerun the command but append `--key KEY`, where KEY is the key printed beside the name of an item. 
 
 In the specific circumstance that you're clocking out of a task whose name is shared by other tasks, if only one occurrence of all the tasks with that name is _unfinished_, you'll automatically be clocked out of that unfinished task, without the need for manually providing a `key` as explained above. 
