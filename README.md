@@ -126,7 +126,9 @@ In case you want all the raw data, a CSV file is automatically exported to the s
 
 ### log
 
-Displays a full log of all work hours.
+Displays a full log of all work hours. 
+
+As each month has a unique database (managed automatically), this is equivalent to running `previewmonth` with the current month as a parameter.
 
 ### pickup 
 
