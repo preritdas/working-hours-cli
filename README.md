@@ -75,11 +75,9 @@ If you set `titlecase` as `False`, it becomes harder to reference the task in fu
 
 Clock out of an unfinished task.
 
-Does not work on finished tasks; i.e. tasks with a finite `Hours` value.
+Does not work on finished tasks; i.e. tasks with a finite `Hours` value. Therefore, does not accept a positional 'task' parameter like most other commands. This command can only be used to clock out of the single unfinished task, if it exists (you cannot have multiple unfinished tasks in the log).
 
-If you have multiple tasks of the same name, and only one of them is unfinished,  clocks out of the unfinished task.
-
-Deliver a task directly while clocking out with --deliver. If you use --hours, the  `hours` value provided is used instead of a standard calculation involving the current time.
+Deliver a task directly while clocking out with --deliver. If you use --hours, the `hours` value provided is used instead of a standard calculation involving the current time.
 
 | Option | Type | Note |
 | --- | --- | --- |

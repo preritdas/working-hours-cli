@@ -19,9 +19,9 @@ work_log = deta_client.Base(Config.current_db)
 
 
 def _query_db(
-    task: str, 
+    task: str = None, 
     key: str = None, 
-    prioritize_unfinished: bool = False,
+    only_unfinished: bool = False,
     prioritize_undelivered: bool = False
 ) -> dict | bool:
     """
@@ -31,31 +31,50 @@ def _query_db(
     If there was an error finding the item due to an invalid task name or invalid key,
     prints the error using click. 
 
-    If `prioritize_unfinished` is `True`, if there are multiple occurrences of the same 
-    task name, but only one is unfinsihed, the single unfinished task will be 
-    returned without causing an error. The same is true for `allow_underlivered`,
-    designed to enable prioritizing the delivery of the instance of duplicate tasks
-    who has not yet been delivered. 
-
-    `prioritize_unfinished` and `prioritize_undelivered` are mutually exclusive.
+    If `prioritize_undelivered` is `True`, if there are multiple occurrences of the same 
+    task name, but only one has no delivery, the single undelivered task will be 
+    returned without causing an error. 
 
     Returns the item if it was found, or `False` if it wasn't, so functinos calling it
     can use `if not` syntax to determine if they should themselves `return`. 
     """
-    # Ensure mutual exclusivity
-    if prioritize_unfinished and prioritize_undelivered:
+    # Ensure either task or only unfinished is given
+    if not task and not only_unfinished:
         raise Exception(
-            "prioritize_unfinished and prioritize_undelivered are mutually exclusive. "
-            "See docs to learn more."
+            "Neither task nor only_unfinished were given. "
+            "You must provide one of these for the database to be queried."
         )
 
+    # Key is given
     if key is not None:
         db_item = work_log.get(key)
         if not db_item:
-            click.echo("Invalid key. Try again.")
+            console.print(
+                f"Invalid [{Config.colors['key']}]key[/{Config.colors['key']}]. "
+                "Try again."
+            )
             return False
         else:
             return db_item
+
+    # Clockout - only find the single unfinished task
+    if only_unfinished:
+        items = work_log.fetch(
+            {
+                'Hours': None
+            }
+        ).items
+
+        if len(items) == 1:
+            return items[0]
+        elif len(items) == 0:
+            console.print("")
+            console.print(
+                f"There are no unfinished "
+                f"[{Config.colors['task']}]items[/{Config.colors['task']}]."
+            )
+            console.print("")
+            return False
 
     fetch_title = False
     items = work_log.fetch(
@@ -84,17 +103,7 @@ def _query_db(
         return False
 
     if len(items) > 1:
-        if prioritize_unfinished:
-            # Check if only one is unfinished
-            query_unfinished = work_log.fetch(
-                {
-                    'Task': task.title() if fetch_title else task,
-                    'Hours': None
-                }
-            ).items
-            if len(query_unfinished) == 1:
-                return query_unfinished[0]
-        elif prioritize_undelivered:
+        if prioritize_undelivered:
             # Check if only one is undelivered
             query_undelivered = work_log.fetch(
                 {
@@ -114,7 +123,6 @@ def _query_db(
         return False
 
     db_item = items[0]
-
     return db_item
 
 
@@ -244,24 +252,23 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
 
 
 @click.command()
-@click.argument("task")
 @click.option('--key', type=str, help="Unique database key if prompted by CLI.")
 @click.option('--hours', type=float, help="Force the number of hours worked.")
 @click.option('--deliver', type=str, help="Add a deliverable item.")
-def clockout(task: str, key: str, hours: float, deliver: str):
+def clockout(key: str, hours: float, deliver: str):
     """
     Clock out of an unfinished task.
 
-    Does not work on finished tasks; i.e. tasks with a finite `Hours` value.
-    
-    If you have multiple tasks of the same name, and only one of them is unfinished, 
-    clocks out of the unfinished task. 
+    Does not work on finished tasks; i.e. tasks with a finite `Hours` value. Therefore,
+    does not accept a positional 'task' parameter like most other commands. This command
+    can only be used to clock out of the single unfinished task, if it exists (you cannot 
+    have multiple unfinished tasks in the log).
 
     Deliver a task directly while clocking out with --deliver. If you use --hours, the 
     `hours` value provided is used instead of a standard calculation involving the 
     current time.
     """
-    db_task = _query_db(task, key, prioritize_unfinished=True)
+    db_task = _query_db(key=key, only_unfinished=True)
     if not db_task:
         return
 
