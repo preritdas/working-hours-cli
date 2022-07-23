@@ -428,10 +428,11 @@ def previewmonth(monthyear: str):
 @click.argument('monthyear', type=str)
 def export(monthyear: str):
     """
-    Export the provided month's tasks to a CSV file.
+    Create a PDF report of the provided month's work log.
     
+    Exports the provided month's tasks in PDF and CSV formats.
     The file is automatically stored in your current directory; i.e.
-    where your terminal/shell is navigated to currently.
+    where your terminal/shell is navigated upon executing the command.
 
     The required `monthyear` parameter takes the format "7-2022" where 
     7 is July and 2022 is the year. 
@@ -453,9 +454,12 @@ def export(monthyear: str):
         console.print("")
         return
 
-    path = export_tasks(items)
+    path = export_tasks(items, monthyear=monthyear)
     console.print("")
-    console.print(f"Your tasks CSV has been exported to '{path}'.")
+    console.print(
+        f"Your log has been exported to the current directory in PDF and CSV foramt. "
+        f"See '{path}.csv' and '{path}.pdf'."
+    )
     console.print("Execute 'ls' to view the contents of your current directory.")
     console.print(
         "Navigate to this directory in a file browser and "
