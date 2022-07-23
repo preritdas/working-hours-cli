@@ -101,6 +101,8 @@ Note that you don't technically have to clock out to add a deliverable. And, del
 
 View a task's deliverable.
 
+If the deliverable is determined to be a link, the link is automatically opened in your default browser.
+
 | Option | Type | Note |
 | --- | --- | --- |
 | --key | string | Unique database key, for use if prompted by CLI. |

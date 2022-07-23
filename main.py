@@ -4,6 +4,7 @@ import deta  # database
 
 # local imports
 import datetime as dt  # current time and time calculations
+import webbrowser  # auto open deliverable links
 
 # Project modules
 import _keys  # deta auth
@@ -407,6 +408,9 @@ def deliver(task: str, item: str, key: str):
 def deliverable(task: str, key: str):
     """
     View a tasks's deliverable. 
+
+    If the deliverable is determined to be a link, the link is automatically opened
+    in your default browser.
     """
     db_item = _query_db(task, key)
     if not db_item:
@@ -430,6 +434,9 @@ def deliverable(task: str, key: str):
         f"[/{Config.colors['deliverable']}]"  # end the rich color tag
     )
     console.print("")
+
+    if 'http' in deliverable_item:
+        webbrowser.open(deliverable_item)
 
 
 @click.command()
