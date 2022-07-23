@@ -2,6 +2,8 @@
 
 An extremely simple-to-use command-line interface built to remove the stress of logging working hours, keeping track of completed payable tasks, and referencing deliverables. Simply `clockin` to your task, complete it, and `clockout`, and the rest is taken care of. Of course, that's just the bare-bones functionality... A heap of features await you.
 
+![log_screenshot](readme-content/log_screenshot.PNG)
+
 
 See the CLI in action...
 
@@ -39,8 +41,10 @@ The following is a list of all commands with their behavior summarized.
 | clockout | Clock out of an unfinished task. |
 | deliver | Stores a deliverable item after you've clocked out. |
 | deliverable | View a tasks's deliverable. |
+| export | Create a PDF report of the provided month's work log. |
 | log | Displays a full log of all work hours. |
 | pickup | Continue working on a pre-existing task. |
+| previewmonth | Displays all tasks of a given month. |
 | removetask | Removes task with `key`. |
 | totalhours | Calculates the total hours worked on all tasks. |
 
@@ -94,6 +98,22 @@ View a task's deliverable.
 | --- | --- | --- |
 | --key | string | Unique database key, for use if prompted by CLI. |
 
+### export
+
+Create a PDF report of the provided month's work log. This is useful for exporting a report of all work completed once the month is over. For example, it's August 1st and you'd like a report of all the work you completed in July to send to your employer. Execute `export 7-2022` and you will have a properly formatted PDF document to forward on. 
+
+Exports the provided month's tasks in PDF and CSV formats. The file is automatically stored in your current directory; i.e. where your terminal/shell is navigated upon executing the command.
+
+The required `monthyear` parameter takes the format "7-2022" where  7 is July and 2022 is the year.
+
+A sample generated PDF is displayed below. 
+
+![Sample Report](readme-content/sample_report.PNG)
+
+| Option | Type | Note |
+| --- | --- | --- |
+| monthyear | string | Month and year, ex. 7-2022 for July, 2022. |
+
 ### log
 
 Displays a full log of all work hours.
@@ -106,7 +126,17 @@ Finds a _completed_ task from the database, resets its date to `hours` hours ago
 
 | Option | Type | Note |
 | --- | --- | --- |
-| --key | stirng | Unique database key, for use if prompted by CLI. || Option | Type | Note |
+| --key | string | Unique database key, for use if prompted by CLI. || Option | Type | Note |
+
+### previewmonth
+
+Displays all tasks of a given month. This is useful when previewing the contents of an export before exporting to a PDF. See the section on `export` (or run `export --help`) to learn more about why you'd ever want to do that.
+
+The required `monthyear` parameter takes the format "7-2022" where  7 is July and 2022 is the year.
+
+| Option | Type | Note |
+| --- | --- | --- |
+| monthyear | string | Month and year, ex. 7-2022 for July, 2022. |
 
 ### removetasks
 
