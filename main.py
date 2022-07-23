@@ -163,7 +163,7 @@ def log():
     '--titlecase', 
     type = bool, 
     default = True, 
-    help="Override auto titlecasing. Makes future reference harder."
+    help = "Override auto titlecasing. Makes future reference harder."
 )
 def clockin(task: str, hours: float, date: str, titlecase: bool):
     """
