@@ -27,6 +27,10 @@ def export_tasks(tasks: list[dict], monthyear: str) -> str:
 
     for task in tasks:
         del task['key']
+
+        # Mark all unfinished tasks as 0 hours
+        if not task['Hours']:
+            task['Hours'] = 0
     
     # Store CSV before changing values
     path = os.path.join(os.getcwd(), f"Work Log {monthyear}")
