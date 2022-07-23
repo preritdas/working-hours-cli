@@ -43,7 +43,10 @@ def export_tasks(tasks: list[dict], monthyear: str) -> str:
 
 
 def create_pdf(tasks: list[dict], monthyear: str, path: str):
-    """Testing."""
+    """
+    Generate a full PDF report, shortening links with Bitly, 
+    and including an appendix.
+    """
     data = [list(tasks[0].keys())]
     appendix_count = 0
     appendix = {}
@@ -76,7 +79,7 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     pdf.set_font("Times", size=11)
 
     pdf.cell(
-        txt=(
+        txt = (
             "The following is an automatically generated report of all hours logged "
             f"in the month of {monthyear}. "
         )
@@ -84,7 +87,7 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
     pdf.ln()
 
     pdf.cell(
-        txt="Any deliverables cut off for length reasons can be seen in full in the appendix."
+        txt = "Any items cut off for lack of space can be seen in full in the appendix."
     )
     pdf.ln()
 
