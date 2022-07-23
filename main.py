@@ -414,7 +414,10 @@ def deliverable(task: str, key: str):
 @click.argument('monthyear', type=str)
 def previewmonth(monthyear: str):
     """
-    Displays all tasks of a given month.
+    Displays all tasks of a given month. This is useful when previewing the 
+    contents of an export before exporting to a PDF. 
+    See the section on `export` (or run `export --help`) to learn more 
+    about why you'd ever want to do that.
     
     The required `monthyear` parameter takes the format "7-2022" where 
     7 is July and 2022 is the year. 
@@ -439,7 +442,12 @@ def previewmonth(monthyear: str):
 @click.argument('monthyear', type=str)
 def export(monthyear: str):
     """
-    Create a PDF report of the provided month's work log.
+    Create a PDF report of the provided month's work log. This is useful for 
+    exporting a report of all work completed once the month is over. 
+    For example, it's August 1st and you'd like a report of all the work you 
+    completed in July to send to your employer. 
+    Execute `export 7-2022` and you will have a properly formatted PDF document 
+    to forward on. Create a PDF report of the provided month's work log.
     
     Exports the provided month's tasks in PDF and CSV formats.
     The file is automatically stored in your current directory; i.e.
