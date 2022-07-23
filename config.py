@@ -33,3 +33,7 @@ class Config:
     db_basename = config['General']['database_name']
     month, year = dt.datetime.now().month, dt.datetime.now().year
     current_db = db_basename + f"_{month}_{year}"
+
+    # Report
+    report_font = config['Report']['font']
+    report_char_cutoff = int(config['Report']['char_length_cutoff'])
