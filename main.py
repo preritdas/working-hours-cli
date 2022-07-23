@@ -9,10 +9,12 @@ import datetime as dt  # current time and time calculations
 import _keys  # deta auth
 from display import display_tasks, console  # printing tasks
 from config import Config
+from export import export_tasks  # exporting tasks to csv
 
 
 # Deta
-work_log = deta.Deta(_keys.Deta.project_key).Base(Config.current_db)
+deta_client = deta.Deta(_keys.Deta.project_key)
+work_log = deta_client.Base(Config.current_db)
 
 
 def _query_db(
@@ -397,6 +399,71 @@ def deliverable(task: str, key: str):
     console.print("")
 
 
+@click.command()
+@click.argument('monthyear', type=str)
+def previewmonth(monthyear: str):
+    """
+    Displays all tasks of a given month.
+    
+    The required `monthyear` parameter takes the format "7-2022" where 
+    7 is July and 2022 is the year. 
+    """
+    # If user provides a leading 0
+    if monthyear[0] == '0':
+        monthyear = monthyear[1:]
+
+    month, year = monthyear.split('-')
+    items = deta_client.Base(Config.db_basename + f"_{month}_{year}").fetch().items
+
+    if len(items) == 0:
+        console.print("")
+        console.print(f"No database was found for '{monthyear}'.")
+        console.print("")
+        return
+
+    display_tasks(items)
+
+
+@click.command()
+@click.argument('monthyear', type=str)
+def export(monthyear: str):
+    """
+    Export the provided month's tasks to a CSV file.
+    
+    The file is automatically stored in your current directory; i.e.
+    where your terminal/shell is navigated to currently.
+
+    The required `monthyear` parameter takes the format "7-2022" where 
+    7 is July and 2022 is the year. 
+    """
+    # If user provides a leading 0
+    if monthyear[0] == '0':
+        monthyear = monthyear[1:]
+
+    # Parse the input
+    month, year = monthyear.split('-')
+
+    db_lookup = Config.db_basename + f"_{month}_{year}"
+    db = deta_client.Base(db_lookup)
+
+    items = db.fetch().items
+    if len(items) == 0:
+        console.print("")
+        console.print(f"No database was found for '{monthyear}'.")
+        console.print("")
+        return
+
+    path = export_tasks(items)
+    console.print("")
+    console.print(f"Your tasks CSV has been exported to '{path}'.")
+    console.print("Execute 'ls' to view the contents of your current directory.")
+    console.print(
+        "Navigate to this directory in a file browser and "
+        "open the CSV in Excel to view it properly formatted."
+    )
+    console.print("")
+
+
 # Register the commands
 cli.add_command(log)  # print log
 cli.add_command(clockin)  
@@ -406,6 +473,8 @@ cli.add_command(removetask)
 cli.add_command(totalhours)
 cli.add_command(deliver)  # add deliverable
 cli.add_command(deliverable)  # view deliverable
+cli.add_command(previewmonth)  # view the tasks of a given month's db
+cli.add_command(export)  # exporting tasks
 
 
 if __name__ == '__main__':
