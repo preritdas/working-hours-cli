@@ -30,5 +30,6 @@ class Config:
         center_table = False
 
     # Database name by month
+    db_basename = config['General']['database_name']
     month, year = dt.datetime.now().month, dt.datetime.now().year
-    current_db = config['General']['database_name'] + f"_{month}_{year}"
+    current_db = db_basename + f"_{month}_{year}"
