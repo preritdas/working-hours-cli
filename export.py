@@ -8,7 +8,7 @@ import os
 from config import Config
 from pdfclass import PDF
 from display import _reorder_dicts
-from bitly import _bitly
+from bitly import bitly
 
 
 def export_tasks(tasks: list[dict], monthyear: str) -> str:
@@ -124,7 +124,7 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
 
             if 'http' in deliverable:
                 pdf.ln()
-                pdf.cell(txt=_bitly(deliverable))
+                pdf.cell(txt=bitly(deliverable))
             else:
                 if len(deliverable) < 100:
                     pdf.ln()

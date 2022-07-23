@@ -2,7 +2,7 @@ import requests
 import _keys
 
 
-def _bitly(long_link: str) -> str:
+def bitly(long_link: str) -> str:
     """Shortens link using the bitly API."""
     if not isinstance(long_link, str):
         raise Exception("You must provide a string.")
