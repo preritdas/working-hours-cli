@@ -20,7 +20,8 @@ work_log = deta_client.Base(Config.current_db)
 def _query_db(
     task: str, 
     key: str = None, 
-    allow_unfinished: bool = False
+    prioritize_unfinished: bool = False,
+    prioritize_undelivered: bool = False
 ) -> dict | bool:
     """
     Checks the database for an item matching the task name, the task title,
@@ -29,13 +30,24 @@ def _query_db(
     If there was an error finding the item due to an invalid task name or invalid key,
     prints the error using click. 
 
-    If `allow_unfinished` is `True`, if there are multiple occurrences of the same 
+    If `prioritize_unfinished` is `True`, if there are multiple occurrences of the same 
     task name, but only one is unfinsihed, the single unfinished task will be 
-    returned without causing an error.
+    returned without causing an error. The same is true for `allow_underlivered`,
+    designed to enable prioritizing the delivery of the instance of duplicate tasks
+    who has not yet been delivered. 
+
+    `prioritize_unfinished` and `prioritize_undelivered` are mutually exclusive.
 
     Returns the item if it was found, or `False` if it wasn't, so functinos calling it
     can use `if not` syntax to determine if they should themselves `return`. 
     """
+    # Ensure mutual exclusivity
+    if prioritize_unfinished and prioritize_undelivered:
+        raise Exception(
+            "prioritize_unfinished and prioritize_undelivered are mutually exclusive. "
+            "See docs to learn more."
+        )
+
     if key is not None:
         db_item = work_log.get(key)
         if not db_item:
@@ -71,7 +83,7 @@ def _query_db(
         return False
 
     if len(items) > 1:
-        if allow_unfinished:
+        if prioritize_unfinished:
             # Check if only one is unfinished
             query_unfinished = work_log.fetch(
                 {
@@ -81,6 +93,16 @@ def _query_db(
             ).items
             if len(query_unfinished) == 1:
                 return query_unfinished[0]
+        elif prioritize_undelivered:
+            # Check if only one is undelivered
+            query_undelivered = work_log.fetch(
+                {
+                    'Task': task.title() if fetch_title else task,
+                    'Deliverable': None
+                }
+            ).items
+            if len(query_undelivered) == 1:
+                return query_undelivered[0]
 
         console.print("")
         console.print(
@@ -237,7 +259,7 @@ def clockout(task: str, key: str, hours: float, deliver: str):
     `hours` value provided is used instead of a standard calculation involving the 
     current time.
     """
-    db_task = _query_db(task, key, allow_unfinished=True)
+    db_task = _query_db(task, key, prioritize_unfinished=True)
     if not db_task:
         return
 
@@ -363,7 +385,7 @@ def deliver(task: str, item: str, key: str):
     And, deliverables can also be added directly when clocking out. See clockout
     help to learn more.
     """
-    db_item = _query_db(task, key)
+    db_item = _query_db(task, key, prioritize_undelivered=True)
     if not db_item:
         return
 
