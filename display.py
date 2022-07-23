@@ -47,6 +47,8 @@ def display_tasks(tasks: dict | list[dict], space_above: bool = True) -> None:
     """
     Uses rich to print a table of tasks. If `space_above` is not passed in as 
     `True`, doesn't prints a blank line before printing the table to provide room.
+
+    Reads the first task in the list of tasks to determine what month is being displayed.
     """
     full_log_title = True
     if isinstance(tasks, dict):
@@ -58,8 +60,17 @@ def display_tasks(tasks: dict | list[dict], space_above: bool = True) -> None:
 
     if len(tasks) == 0:  # this should never actually trigger but just in case.
         return
+
+    # Construct title with month and year
+    if full_log_title:
+        date = dt.strptime(tasks[0]['Date'], Config.dt_format)
+        month, year = date.month, date.year
+        title = f"Log of Working Hours for {month}-{year}"
+    else:
+        title = "Single Task View"
     
-    table = Table(title="Log of Working Hours" if full_log_title else "Single Task View")
+    table = Table(title=title)
+
     for key in tasks[0].keys():
         if key.lower() in Config.colors:  # color the columns
             color = Config.colors[key.lower()]
