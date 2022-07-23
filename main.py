@@ -190,11 +190,13 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
         )
 
     # Determine date
+    if date is None:
+        date = dt.datetime.now().strftime(Config.dt_format)
+
+    # Push time backward if hours is given without a date
     if hours is not None and date is None:
         time_started = dt.datetime.now() - dt.timedelta(hours=hours)
         date = time_started.strftime(Config.dt_format)
-    else:
-        date = dt.datetime.now().strftime(Config.dt_format)
 
     work_log.put(
         {
