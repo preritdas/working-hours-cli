@@ -418,6 +418,11 @@ def previewmonth(monthyear: str):
     contents of an export before exporting to a PDF. 
     See the section on `export` (or run `export --help`) to learn more 
     about why you'd ever want to do that.
+
+    Automatically generates an appendix of deliverables that were too long
+    to be fully displayed in the list of tasks. If links were detected, they're 
+    automatically shortened using bitly. Shortened links are then displayed
+    in the appendix. 
     
     The required `monthyear` parameter takes the format "7-2022" where 
     7 is July and 2022 is the year. 

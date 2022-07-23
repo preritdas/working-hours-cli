@@ -108,6 +108,8 @@ Create a PDF report of the provided month's work log. This is useful for exporti
 
 Exports the provided month's tasks in PDF and CSV formats. The file is automatically stored in your current directory; i.e. where your terminal/shell is navigated upon executing the command.
 
+Automatically generates an appendix of deliverables that were too long to be fully displayed in the list of tasks. If links were detected, they're  automatically shortened using bitly. Shortened links are then displayed in the appendix. 
+
 The required `monthyear` parameter takes the format "7-2022" where  7 is July and 2022 is the year.
 
 A sample generated PDF is displayed below. 
