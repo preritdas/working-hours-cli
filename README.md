@@ -5,7 +5,7 @@ An extremely simple-to-use command-line interface built to remove the stress of 
 ![log_screenshot](readme-content/log_screenshot.PNG)
 
 
-See the CLI in action... (note that this demonstration has not been updated to reflect new export features, including `export` and `previewmonth`. See the documentation below to learn about PDF reports.)
+See the CLI in action... (Note: this demonstration has not yet been updated to reflect new formatting and PDF report features, including `export` and `previewmonth`. See the [export section](#export) below to learn about PDF reports.)
 
 [![asciicast](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq.svg)](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq)
 
