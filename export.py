@@ -63,7 +63,7 @@ def create_pdf(tasks: list[dict], monthyear: str, path: str):
         data.append(list(task.values()))
 
 
-    pdf = PDF()
+    pdf = PDF(format='letter')
     pdf.add_page()
     pdf.set_font(Config.report_font, size=16)
 
