@@ -5,7 +5,7 @@ An extremely simple-to-use command-line interface built to remove the stress of 
 ![log_screenshot](readme-content/log_screenshot.PNG)
 
 
-See the CLI in action...
+See the CLI in action... (note that this demonstration has not been updated to reflect new export features, including `export` and `previewmonth`. See the documentation below to learn about PDF reports.)
 
 [![asciicast](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq.svg)](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq)
 
@@ -109,6 +109,8 @@ The required `monthyear` parameter takes the format "7-2022" where  7 is July an
 A sample generated PDF is displayed below. 
 
 ![Sample Report](readme-content/sample_report.PNG)
+
+In case you want all the raw data, a CSV file is automatically exported to the same directory as the PDF file (shell current working directory). This can be opened directly in Excel and either preserved or converted to .xlsx format. 
 
 | Option | Type | Note |
 | --- | --- | --- |
