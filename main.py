@@ -364,7 +364,8 @@ def totalhours(payrate: float):
     console.print("")
     console.print(
         f"You've worked a total of "
-        f"[{Config.colors['hours']}]{hours:,.2f}[/{Config.colors['hours']}] hours."
+        f"[{Config.colors['hours']}]{hours:,.2f}[/{Config.colors['hours']}] hours. "
+        "this month."
     )
     if payrate is not None:
         console.print(
