@@ -39,9 +39,9 @@ def _query_db(
     can use `if not` syntax to determine if they should themselves `return`. 
     """
     # Ensure either task or only unfinished is given
-    if not task and not only_unfinished:
+    if not task and not only_unfinished and not key:
         raise Exception(
-            "Neither task nor only_unfinished were given. "
+            "Neither task, only_unfinished, nor key were given. "
             "You must provide one of these for the database to be queried."
         )
 
