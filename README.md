@@ -4,6 +4,10 @@ An extremely simple-to-use command-line interface built to remove the stress of 
 
 ![log_screenshot](readme-content/log_screenshot.PNG)
 
+Now with support for auto-generated PDF reports!
+
+![PDF Report](readme-content/sample_report.PNG)
+
 
 See the CLI in action... (Note: this demonstration has not yet been updated to reflect new formatting and PDF report features, including `export` and `previewmonth`. See the [export section](#export) below to learn about PDF reports.)
 
