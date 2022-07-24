@@ -12,10 +12,24 @@ from display import display_tasks, console  # printing tasks
 from config import Config
 from export import export_tasks  # exporting tasks to csv
 
+# Debugging with the Rich traceback
+from rich import traceback
+traceback.install()
+
 
 # Deta
 deta_client = deta.Deta(_keys.Deta.project_key)
 work_log = deta_client.Base(Config.current_db)
+
+
+# Item types
+database_types: dict[str, type] = {
+    'Date': str,
+    'Task': str,
+    'Hours': float,
+    'Deliverable': str,
+    'key': str
+}
 
 
 def _query_db(
@@ -309,7 +323,7 @@ def clockout(key: str, hours: float, deliver: str):
 
 @click.command()
 @click.argument("task", type=str)
-@click.option("--key", type=str, help="Unique database key for use if prompted by CLI.")
+@click.option("--key", type=str, help="Unique database key, if prompted by CLI.")
 def pickup(task: str, key: str):
     """
     Continue working on a pre-existing task.
@@ -386,7 +400,7 @@ def totalhours(payrate: float):
 @click.command()
 @click.argument("task", type=str)
 @click.argument("item", type=str)
-@click.option('--key', type=str, help="Unique database key for use if prompted by CLI.")
+@click.option('--key', type=str, help="Unique database key, if prompted by CLI.")
 def deliver(task: str, item: str, key: str):
     """
     Stores a deliverable item after you've clocked out.
@@ -413,7 +427,7 @@ def deliver(task: str, item: str, key: str):
 
 @click.command()
 @click.argument("task", type=str)
-@click.option('--key', type=str, help="Unique database key, for use if prompted by CLI.")
+@click.option('--key', type=str, help="Unique database key, if prompted by CLI.")
 def deliverable(task: str, key: str):
     """
     View a tasks's deliverable. 
@@ -530,6 +544,68 @@ def export(monthyear: str):
     console.print("")
 
 
+@click.command()
+@click.argument('task', type=str)
+@click.argument('item', type=str)
+@click.argument('value')
+@click.option('--key', type=str, help="Unique database key, if prompted by CLI.")
+def modify(task: str, item: str, value: str | int, key: str):
+    """
+    Change an attribute of a logged item.
+
+    Automatically tries to convert the value provided to the appropriate type,
+    depending on the attribute. For example, if the user requests to change the
+    'hours' attribute of an item, the value is automatically converted to a float.
+    If this operation fails, the user is notified that their provided value is
+    unacceptable.
+
+    This command is only meant to be used to correct errors. To update the delivery
+    of a task, it is much safer to use the `deliver` command.
+    """
+    item = item.title()
+
+    task = _query_db(task, key)
+    if not task:
+        return
+
+    # Check if the requested attribute is available
+    if not item in database_types:
+        console.print("")
+        console.print(
+            f"'{item}' is not a valid attribute of any "
+            f"[{Config.colors['task']}]item[/{Config.colors['task']}] "
+            "in the database."
+        )
+        console.print("")
+        return
+
+    # Check if the correct value type can be used
+    if not isinstance(value, database_types[item]):
+        try:
+            value = database_types[item](value)
+        except ValueError:
+            console.print("")
+            console.print(
+                f"{value} is an unacceptable type for the attribute "
+                f"'{item}'."
+            )
+            console.print("")
+            return
+
+    # Update the database
+    task[item] = value
+    work_log.put(task)
+
+    # Report back to the user
+    console.print("")
+    console.print(
+        f"The [{Config.colors['task']}]{task['Task']}[/{Config.colors['task']}] "
+        f"'{item}' attribute has been set to {value}. "
+    )
+    console.print("")
+    display_tasks(task)
+
+
 # Register the commands
 cli.add_command(log)  # print log
 cli.add_command(clockin)  
@@ -541,6 +617,7 @@ cli.add_command(deliver)  # add deliverable
 cli.add_command(deliverable)  # view deliverable
 cli.add_command(previewmonth)  # view the tasks of a given month's db
 cli.add_command(export)  # exporting tasks
+cli.add_command(modify)
 
 
 if __name__ == '__main__':
