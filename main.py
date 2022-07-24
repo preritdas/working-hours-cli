@@ -36,7 +36,8 @@ def _query_db(
     task: str = None, 
     key: str = None, 
     only_unfinished: bool = False,
-    prioritize_undelivered: bool = False
+    prioritize_undelivered: bool = False,
+    prioritize_delivered: bool = False
 ) -> dict | bool:
     """
     Checks the database for an item matching the task name, the task title,
@@ -57,6 +58,11 @@ def _query_db(
         raise Exception(
             "Neither task, only_unfinished, nor key were given. "
             "You must provide one of these for the database to be queried."
+        )
+
+    if prioritize_delivered and prioritize_undelivered:
+        raise Exception(
+            "You cannot prioritize both delivered and undelivered tasks."
         )
 
     # Key is given
@@ -127,6 +133,14 @@ def _query_db(
             ).items
             if len(query_undelivered) == 1:
                 return query_undelivered[0]
+
+        if prioritize_delivered:
+            delivered_items = []
+            for item in items:
+                if item['Deliverable']:
+                    delivered_items.append(item)
+            if len(delivered_items) == 1:
+                return delivered_items[0]
 
         console.print("")
         console.print(
@@ -435,7 +449,7 @@ def deliverable(task: str, key: str):
     If the deliverable is determined to be a link, the link is automatically opened
     in your default browser.
     """
-    db_item = _query_db(task, key)
+    db_item = _query_db(task, key, prioritize_delivered=True)
     if not db_item:
         return
 
