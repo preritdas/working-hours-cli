@@ -50,6 +50,7 @@ The following is a list of all commands with their behavior summarized.
 | deliverable | View a tasks's deliverable. |
 | export | Create a PDF report of the provided month's work log. |
 | log | Displays a full log of all work hours. |
+| modify | Change an attribute of a logged item. |
 | pickup | Continue working on a pre-existing task. |
 | previewmonth | Displays all tasks of a given month. |
 | removetask | Removes task with `key`. |
@@ -130,6 +131,21 @@ In case you want all the raw data, a CSV file is automatically exported to the s
 Displays a full log of all work hours. 
 
 As each month has a unique database (managed automatically), this is equivalent to running `previewmonth` with the current month as a parameter.
+
+### modify
+
+Change an attribute of a logged item.
+
+Automatically tries to convert the value provided to the appropriate type, depending on the attribute. For example, if the user requests to change the 'hours' attribute of an item, the value is automatically converted to a float. If this operation fails, the user is notified that their provided value is unacceptable.
+
+This command is only meant to be used to correct errors. To update the delivery of a task, it is much safer to use the `deliver` command.
+
+| Option | Type | Note |
+| --- | --- | --- |
+| task | string | The name of the task whose attribute you wish to change. |
+| item | string | The name of the attribute you wish to change. This can be anything in the log, except `key`. |
+| value | any | The value you wish to change the task's attribute to. |
+| --key | string | Unique database key, for use if prompted by CLI. |
 
 ### pickup 
 
