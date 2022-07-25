@@ -42,7 +42,7 @@ def export_tasks(tasks: list[dict], monthyear: str) -> str:
     path = os.path.join(os.getcwd(), base_name)
 
     # Store CSV before changing values
-    pd.DataFrame(tasks).to_csv(f"{path.csv}")
+    pd.DataFrame(tasks).to_csv(f"{path}.csv")
 
     # Make PDF
     create_pdf(tasks, monthyear, f"{path}.pdf")
