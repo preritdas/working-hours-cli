@@ -614,7 +614,8 @@ def modify(task: str, item: str, value: str | int, key: str):
     console.print("")
     console.print(
         f"The [{Config.colors['task']}]{task['Task']}[/{Config.colors['task']}] "
-        f"'{item}' attribute has been set to {value}. "
+        f"'{item}' attribute has been set to "
+        f"[{Config.colors['deliverable']}]{value}[/{Config.colors['deliverable']}]. "
     )
     console.print("")
     display_tasks(task)
