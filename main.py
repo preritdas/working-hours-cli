@@ -553,13 +553,10 @@ def export(monthyear: str):
     console.print("")
     console.print(
         f"Your log has been exported to the current directory in PDF and CSV, "
-        "and zipped foramt. "
-        f"See '{path}.csv', '{path}.pdf', and {path}.zip."
+        "and zipped format. "
     )
-    console.print("Execute 'ls' to view the contents of your current directory.")
     console.print(
-        "Navigate to this directory in a file browser and "
-        "open the CSV in Excel to view it properly formatted."
+        f"'{path}.csv'\n'{path}.pdf'\n'{path}.zip'"
     )
     console.print("")
 
