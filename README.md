@@ -9,9 +9,10 @@ Now with support for auto-generated PDF reports!
 ![PDF Report](readme-content/sample_report.PNG)
 
 
-See the CLI in action... (Note: this demonstration has not yet been updated to reflect new formatting and PDF report features, including `export` and `previewmonth`. See the [export section](#export) below to learn about PDF reports.)
+See the CLI in action... 
 
-[![asciicast](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq.svg)](https://asciinema.org/a/pBSbTGPRHUhbKkkGw85DqMeSq)
+[![asciicast](https://asciinema.org/a/hBz5Yi2KJHOMYegXLZVpFOMp9.svg)](https://asciinema.org/a/hBz5Yi2KJHOMYegXLZVpFOMp9)
+
 
 ## Deployment
 
