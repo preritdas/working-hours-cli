@@ -3,6 +3,7 @@ import pandas as pd
 
 # Local imports
 import os
+import zipfile
 
 # Project modules
 from config import Config
@@ -18,9 +19,14 @@ def export_tasks(tasks: list[dict], monthyear: str) -> str:
     `monthyear` is in the format 7-2022. This is provided by the user when
     invoking the export command from the CLI.
     
-    The resulting file is stored in the current working directory of the terminal.
+    The resulting files are stored in the current working directory of the terminal.
     So, the user should be instructed to navigate to the output directory of choice
     using cd in their shell, and then execute the command using the CLI.
+
+    Output files are automatically zipped together into a .zip archive called 
+    "Work Log 7-2022.zip" if the month is July, 2022. This is a single file
+    that can be forwarded to anyone. When unzipped, it contains all export files,
+    including the PDF report and CSV full list of all logged tasks.
     """
     # Remove key and convert everything to string and shorten long values
     tasks = _reorder_dicts(tasks)
@@ -32,12 +38,19 @@ def export_tasks(tasks: list[dict], monthyear: str) -> str:
         if not task['Hours']:
             task['Hours'] = 0
     
+    base_name = f"Work Log {monthyear}"
+    path = os.path.join(os.getcwd(), base_name)
+
     # Store CSV before changing values
-    path = os.path.join(os.getcwd(), f"Work Log {monthyear}")
-    pd.DataFrame(tasks).to_csv(path+'.csv')
+    pd.DataFrame(tasks).to_csv(f"{path.csv}")
 
+    # Make PDF
+    create_pdf(tasks, monthyear, f"{path}.pdf")
 
-    create_pdf(tasks, monthyear, path+'.pdf')
+    # Zip resulting files
+    with zipfile.ZipFile(os.path.join(os.getcwd(), f"{base_name}.zip"), "w") as archive:
+        archive.write(f"Work Log {monthyear}.csv")
+        archive.write(f"Work Log {monthyear}.pdf")
 
     return path
 

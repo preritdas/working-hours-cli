@@ -117,6 +117,8 @@ Automatically generates an appendix of deliverables that were too long to be ful
 
 The required `monthyear` parameter takes the format "7-2022" where  7 is July and 2022 is the year.
 
+Output files are automatically zipped together into a .zip archive called "Work Log 7-2022.zip" if the month is July, 2022. This is a single file that can be forwarded to anyone. When unzipped, it contains all export files, including the PDF report and CSV full list of all logged tasks.
+
 A sample generated PDF is displayed below. 
 
 ![Sample Report](readme-content/sample_report.PNG)
