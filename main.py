@@ -552,8 +552,9 @@ def export(monthyear: str):
     path = export_tasks(items, monthyear=monthyear)
     console.print("")
     console.print(
-        f"Your log has been exported to the current directory in PDF and CSV foramt. "
-        f"See '{path}.csv' and '{path}.pdf'."
+        f"Your log has been exported to the current directory in PDF and CSV, "
+        "and zipped foramt. "
+        f"See '{path}.csv', '{path}.pdf', and {path}.zip."
     )
     console.print("Execute 'ls' to view the contents of your current directory.")
     console.print(
