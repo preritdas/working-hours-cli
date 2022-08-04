@@ -1,6 +1,13 @@
+"""
+Read the config.ini and parse values into their appropriate types.
+"""
+# Local imports
 import configparser
 import os  # join paths
 import datetime as dt
+
+# Project modules
+import _keys
 
 
 # Initialize config
@@ -37,3 +44,14 @@ class Config:
     # Report
     report_font = config['Report']['font']
     report_char_cutoff = int(config['Report']['char_length_cutoff'])
+
+    # Smart capitalization - RapidAPI
+    smart_cap_preference = config['General']['smart_capitalization'].lower()
+    if smart_cap_preference == 'true' and not _keys.RapidAPI.api_key:
+        raise Exception(
+            "If you have smart capitalization enabled, you must "
+            "provide your RapidAPI API key and subscribe to the "
+            "Capitalize My Title app, as documented in the README."
+        )
+    smart_cap_preference = True if smart_cap_preference == 'true' else False
+    
