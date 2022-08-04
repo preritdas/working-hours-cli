@@ -11,6 +11,7 @@ import _keys  # deta auth
 from display import display_tasks, console  # printing tasks
 from config import Config
 from export import export_tasks  # exporting tasks to csv
+import utils  # title capitalization
 
 # Debugging with the Rich traceback
 from rich import traceback
@@ -107,7 +108,7 @@ def _query_db(
     if len(items) == 0:
         items = work_log.fetch(
             {
-                'Task': task.title()
+                'Task': utils.capitalize_title(task)
             }
         ).items
         fetch_title = True
@@ -127,7 +128,7 @@ def _query_db(
             # Check if only one is undelivered
             query_undelivered = work_log.fetch(
                 {
-                    'Task': task.title() if fetch_title else task,
+                    'Task': utils.capitalize_title(task) if fetch_title else task,
                     'Deliverable': None
                 }
             ).items
@@ -213,7 +214,7 @@ def clockin(task: str, hours: float, date: str, titlecase: bool):
     instead automatically or manually set as "Hello", the previous command would work.
     """
     # If not explicitly false, use title case
-    task = task.title() if titlecase else task
+    task = utils.capitalize_title(task) if titlecase else task
 
     # Check for multiple unfinished tasks
     tasks = work_log.fetch(
@@ -579,7 +580,7 @@ def modify(task: str, item: str, value: str | int, key: str):
     This command is only meant to be used to correct errors. To update the delivery
     of a task, it is much safer to use the `deliver` command.
     """
-    item = item.title()
+    item = utils.capitalize_title(item)
 
     task = _query_db(task, key)
     if not task:
