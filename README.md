@@ -39,6 +39,11 @@ In the specific circumstance that you're clocking out of a task whose name is sh
 
 Similarly, if you try to add a delivery to a duplicate task, if only one of the duplicates is incomplete (hasn't been clocked out), instead of prompting you to provide a key, it'll deliver to that task automatically. 
 
+### Smart Title Capitalization
+
+If enabled in `config.ini`, the Working Hours CLI will use CapitalizeMyTitle's API to properly capitalize task names. For example, instead of converting "this and that" to "This And That", it will use "This and That", in accordance with proper APA capitalization rules. This requires a (free) RapidAPI API key, with a free subscription to the CapitalizeMyTitle app. If this feature is disabled in `config.ini`, blind capitalization is used instead, as normal (unless you explicitly set `titlecase False` in your command, as noted in the commands section below).
+
+
 ## Commands
 
 The following is a list of all commands with their behavior summarized.
