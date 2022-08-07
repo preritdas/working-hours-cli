@@ -533,27 +533,28 @@ def export(monthyear: str):
     that can be forwarded to anyone. When unzipped, it contains all export files,
     including the PDF report and CSV full list of all logged tasks.
     """
-    # If user provides a leading 0
-    if monthyear[0] == '0':
-        monthyear = monthyear[1:]
+    with console.status(f"Generating a report for {monthyear}."):
+        # If user provides a leading 0
+        if monthyear[0] == '0':
+            monthyear = monthyear[1:]
 
-    # Parse the input
-    month, year = monthyear.split('-')
+        # Parse the input
+        month, year = monthyear.split('-')
 
-    db_lookup = Config.db_basename + f"_{month}_{year}"
-    db = deta_client.Base(db_lookup)
+        db_lookup = Config.db_basename + f"_{month}_{year}"
+        db = deta_client.Base(db_lookup)
 
-    items = db.fetch().items
-    if len(items) == 0:
-        console.print("")
-        console.print(f"No database was found for '{monthyear}'.")
-        console.print("")
-        return
+        items = db.fetch().items
+        if len(items) == 0:
+            console.print("")
+            console.print(f"No database was found for '{monthyear}'.")
+            console.print("")
+            return
 
-    path = export_tasks(items, monthyear=monthyear)
-    console.print("")
+        path = export_tasks(items, monthyear=monthyear)
+
     console.print(
-        f"Your log has been exported to the current directory in PDF and CSV, "
+        f"\nYour log has been exported to the current directory in PDF and CSV, "
         "and zipped format. "
     )
     console.print(
