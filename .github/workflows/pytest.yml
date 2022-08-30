@@ -23,7 +23,7 @@ jobs:
 
       - name: Inject API keys
         run: |
-          echo -en '${{ secrets._KEYS_PY }}' >> _keys.py
+          echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
 
       - name: Install test dependencies
         run: pip install pytest
