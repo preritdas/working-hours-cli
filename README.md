@@ -1,3 +1,6 @@
+![pytest](https://github.com/preritdas/working-hours-cli/actions/workflows/pytest.yml/badge.svg)
+
+
 # Working Hours CLI
 
 An extremely simple-to-use command-line interface built to remove the stress of logging working hours, keeping track of completed payable tasks, and referencing deliverables. Simply `clockin` to your task, complete it, and `clockout`, and the rest is taken care of. Of course, that's just the bare-bones functionality... A heap of features await you.
