@@ -33,7 +33,7 @@ jobs:
         with:
           linux: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
           macos: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
-          windows: New-Item "keys.ini" -ItemType File -Value "${{ secrets.KEYS_INI }}"
+          windows: New-Item "_keys.py" -ItemType File -Value "${{ secrets._KEYS_PY }}"
 
       - name: Install test dependencies
         run: pip install pytest-cov coverage-badge
