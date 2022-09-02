@@ -27,7 +27,7 @@ def capitalize_title(title: str, method_force: str = None) -> str:
     # Determine method
     if method_force.lower() == "smart" or Config.smart_cap_preference:
         method = CapitalizationMethod.SMART
-    elif method_force.lower() != "smart" or not Config.smart_cap_preference:
+    else:
         method = CapitalizationMethod.DEFAULT
 
     # If smart capitalization is disabled
