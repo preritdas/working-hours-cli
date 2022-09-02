@@ -1,4 +1,5 @@
 ![pytest](https://github.com/preritdas/working-hours-cli/actions/workflows/pytest.yml/badge.svg)
+![coverage](tests/badge.svg)
 
 
 # Working Hours CLI
