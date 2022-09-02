@@ -1,11 +1,17 @@
-name: Tests
+name: tests
 
 on: [push, pull_request]
 
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+  
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository code
@@ -22,11 +28,25 @@ jobs:
           pip install -r requirements.txt
 
       - name: Inject API keys
-        run: |
-          echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
+        uses: knicknic/os-specific-run@v1.0.3
+        with:
+          linux: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
+          macos: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
+          windows: New-Item "keys.ini" -ItemType File -Value "${{ secrets.KEYS_INI }}"
 
       - name: Install test dependencies
-        run: pip install pytest
+        run: pip install pytest-cov coverage-badge
 
       - name: Run tests with pytest
-        run: python -m pytest
+        run: python -m pytest --cov
+        
+      - name: Update coverage badge (Ubuntu only)
+        uses: knicknic/os-specific-run@v1.0.3
+        with:
+          linux: |
+            coverage-badge -o tests/badge.svg -f
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add tests/badge.svg
+            git commit --author="Prerit Das <preritdas@gmail.com>" -m "Update coverage badge after unit tests."
+            git push
