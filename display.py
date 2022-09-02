@@ -9,7 +9,7 @@ from datetime import datetime as dt
 from config import Config 
 
 
-def _reorder_dicts(tasks: dict | list[dict]) -> list[dict]:
+def _reorder_dicts(tasks: dict: list[dict]) -> list[dict]:
     """
     `tasks` can be a single dict or list of dicts. But, regardless
     of whether a dict or list of dicts was passed, a list of dicts is returned.
