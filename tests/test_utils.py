@@ -1,5 +1,6 @@
 import bitly
 import utils
+import config
 
 
 def test_bitly():
@@ -7,4 +8,7 @@ def test_bitly():
 
 
 def test_capitalization():
-    assert utils.capitalize_title("this is a title")
+    if config.Config.smart_cap_preference:
+        assert utils.capitalize_title("this is a title") == "This Is a Title"
+    elif not config.Config.smart_cap_preference:
+        assert utils.capitalize_title("this is a title") == "This Is A Title"
