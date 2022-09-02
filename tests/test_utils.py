@@ -8,7 +8,5 @@ def test_bitly():
 
 
 def test_capitalization():
-    if config.Config.smart_cap_preference:
-        assert utils.capitalize_title("this is a title") == "This Is a Title"
-    elif not config.Config.smart_cap_preference:
-        assert utils.capitalize_title("this is a title") == "This Is A Title"
+    assert utils.capitalize_title("this is a title", method_force="smart") == "This Is a Title"
+    assert utils.capitalize_title("this is a title", method_force="default") == "This Is A Title"
