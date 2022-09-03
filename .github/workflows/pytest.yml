@@ -42,7 +42,7 @@ jobs:
         run: python -m pytest --cov
         
       - name: Update coverage badge (Ubuntu only)
-        if: ${{ success() || failure() && matrix.os == "ubuntu-latest" && matrix.python == "3.10" }}
+        if: ${{ ( success() || failure() ) && matrix.os == 'ubuntu-latest' && matrix.python == '3.10' }}
         continue-on-error: true
         run: |
           coverage-badge -o tests/badge.svg -f
