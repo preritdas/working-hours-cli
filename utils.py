@@ -25,10 +25,14 @@ def capitalize_title(title: str, method_force: str = None) -> str:
         raise Exception("You can only capitalize string titles.")
 
     # Determine method
-    if method_force.lower() == "smart" or Config.smart_cap_preference:
-        method = CapitalizationMethod.SMART
+
+    if not method_force:
+        method = Config.smart_cap_preference
     else:
-        method = CapitalizationMethod.DEFAULT
+        if method_force.lower() == "smart" or Config.smart_cap_preference:
+            method = CapitalizationMethod.SMART
+        else:
+            method = CapitalizationMethod.DEFAULT
 
     # If smart capitalization is disabled
     if method == CapitalizationMethod.DEFAULT:
