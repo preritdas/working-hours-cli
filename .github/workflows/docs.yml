@@ -33,6 +33,9 @@ jobs:
           sed -i "/typer==0.6.1/d" requirements.txt
           pip install -r requirements.txt
 
+      - name: Inject keys
+        run: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
+
       - name: Build CLI reference
         run: |
           pip install typer-cli

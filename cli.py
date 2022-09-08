@@ -66,7 +66,7 @@ def _query_db(
     returned without causing an error. 
 
     Returns the item if it was found, or `False` if it wasn't, so functinos calling it
-    can use `if not` syntax to determine if they should themselves `return`.  
+    can use `if not` syntax to determine if they should themselves `return`. 
     """
     # Ensure either task or only unfinished is given
     if not task and not only_unfinished and not key:
