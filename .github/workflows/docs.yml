@@ -27,6 +27,11 @@ jobs:
           pip install -U pip wheel
           pip install -r docs/requirements.txt
 
+      - name: Install project dependencies
+        run: |
+          sed -i "/typer==0.6.1/d" requirements.txt
+          pip install -r requirements.txt
+
       - name: Build CLI reference
         run: |
           pip install typer-cli
