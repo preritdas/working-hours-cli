@@ -5,6 +5,7 @@ on:
     paths:
       - "*/**/*.md"
       - "docs/source/*"
+      - "cli.py"
     pull_request:
     workflow_dispatch:
 
