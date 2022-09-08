@@ -1,0 +1,57 @@
+name: docs
+
+on:
+  push:
+    paths:
+      - "*/**/*.md"
+      - "docs/source/*"
+    pull_request:
+    workflow_dispatch:
+
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      
+      - name: Install documentation dependencies
+        run: |
+          pip install -U pip wheel
+          pip install -r docs/requirements.txt
+
+      - name: Build CLI reference
+        run: |
+          pip install typer-cli
+          export PYTHONPATH=$PYTHONPATH:.
+          typer cli.py utils docs --name loghours --output docs/source/cli.md
+
+      - name: Build documentation 
+        run: cd docs && make html && cd ..
+
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@noreply.github.com"
+
+      - name: Commit CLI reference changes
+        continue-on-error: true
+        run: |
+          git add docs/source/cli.md
+          git commit -m "Update CLI reference."
+        
+      - name: Commit documentation build
+        continue-on-error: true
+        run: |
+          git add docs/build/*
+          git commit -m "Build documentation."
+      
+      - name: Push changes
+        run: git push
