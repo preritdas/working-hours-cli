@@ -42,7 +42,7 @@ app = typer.Typer(
     help = (
         "A simple-to-use command-line interface built to remove the stress of logging "
         "working hours, keeping track of completed payable tasks, "
-        "and referencing deliverables."
+        "and referencing deliverables." 
     )
 )
 
@@ -171,7 +171,7 @@ def _query_db(
 
 @app.command()
 def log():
-    """Displays a full log of all work hours."""
+    """Displays a full log of all work hours. Did this come through?"""
     items = work_log.fetch().items
     if len(items) == 0:
         console.print("")
