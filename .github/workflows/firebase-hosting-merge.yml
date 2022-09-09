@@ -6,6 +6,7 @@ name: firebase-deployment
   push:
   workflow_run:
     workflows: ["docs"]
+    branches: ["master", "docs"]
     types:
       - completed
 
