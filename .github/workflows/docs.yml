@@ -6,6 +6,7 @@ on:
       - "*/**/*.md"
       - "docs/source/*"
       - "cli.py"
+      - ".github/workflows/docs.yml"
     pull_request:
     workflow_dispatch:
 
@@ -41,6 +42,7 @@ jobs:
           pip install typer-cli
           export PYTHONPATH=$PYTHONPATH:.
           typer cli.py utils docs --name loghours --output docs/source/cli.md
+          sed -i "1 s/.*/# Cli Reference" docs/source/cli.md
 
       - name: Build documentation 
         run: cd docs && make html && cd ..
