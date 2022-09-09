@@ -309,6 +309,8 @@ where your terminal/shell is navigated upon executing the command.</p>
 “Work Log 7-2022.zip” if the month is July, 2022. This is a single file
 that can be forwarded to anyone. When unzipped, it contains all export files,
 including the PDF report and CSV full list of all logged tasks.</p>
+<p>If no optional path is provided, the files are exported to the current working
+directory (of your console session).</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>loghours <span class="nb">export</span> <span class="o">[</span>OPTIONS<span class="o">]</span> MONTHYEAR
 </pre></div>
@@ -319,6 +321,7 @@ including the PDF report and CSV full list of all logged tasks.</p>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--path</span> <span class="pre">TEXT</span></code>: Absolute path to the folder in which to export your documents.  [required]</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--help</span></code>: Show this message and exit.</p></li>
 </ul>
 </section>
