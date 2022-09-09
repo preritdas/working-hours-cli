@@ -12,7 +12,7 @@ from display import _reorder_dicts
 from bitly import bitly
 
 
-def export_tasks(tasks: list[dict], monthyear: str) -> str:
+def export_tasks(tasks: list[dict], monthyear: str, path: str = None) -> str:
     """
     Takes a list of tasks (dicts) and exports them to a CSV.
 
@@ -39,7 +39,7 @@ def export_tasks(tasks: list[dict], monthyear: str) -> str:
             task['Hours'] = 0
     
     base_name = f"Work Log {monthyear}"
-    path = os.path.join(os.getcwd(), base_name)
+    path = path or os.path.join(os.getcwd(), base_name)
 
     # Store CSV before changing values
     pd.DataFrame(tasks).to_csv(f"{path}.csv")

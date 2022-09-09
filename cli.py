@@ -565,6 +565,10 @@ def export(
     monthyear: str = typer.Argument(
         ..., 
         help = "Month to preview, ex. '7-2022'."
+    ),
+    path: str = typer.Option(
+        ...,
+        help = "Absolute path to the folder in which to export your documents."
     )
 ):
     """
@@ -586,6 +590,9 @@ def export(
     "Work Log 7-2022.zip" if the month is July, 2022. This is a single file
     that can be forwarded to anyone. When unzipped, it contains all export files,
     including the PDF report and CSV full list of all logged tasks.
+
+    If no optional path is provided, the files are exported to the current working
+    directory (of your console session).
     """
     with console.status(f"Generating a report for {monthyear}."):
         # If user provides a leading 0
