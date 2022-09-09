@@ -1,6 +1,8 @@
 ![pytest](https://github.com/preritdas/working-hours-cli/actions/workflows/pytest.yml/badge.svg)
 ![coverage](tests/badge.svg)
 ![versions](https://img.shields.io/badge/python-3.10-blue)
+![docs](https://github.com/preritdas/working-hours-cli/actions/workflows/docs.yml/badge.svg)
+![firebase](https://github.com/preritdas/working-hours-cli/actions/workflows/firebase-hosting-merge.yml/badge.svg)
 
 
 # Working Hours CLI
