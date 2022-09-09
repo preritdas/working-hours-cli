@@ -88,7 +88,9 @@
 </div>
 <p><img alt="pytest" src="https://github.com/preritdas/working-hours-cli/actions/workflows/pytest.yml/badge.svg" />
 <img alt="coverage" src="_images/badge.svg" />
-<img alt="versions" src="https://img.shields.io/badge/python-3.10-blue" /></p>
+<img alt="versions" src="https://img.shields.io/badge/python-3.10-blue" />
+<img alt="docs" src="https://github.com/preritdas/working-hours-cli/actions/workflows/docs.yml/badge.svg" />
+<img alt="firebase" src="https://github.com/preritdas/working-hours-cli/actions/workflows/firebase-hosting-merge.yml/badge.svg" /></p>
 <section id="working-hours-cli">
 <h1>Working Hours CLI<a class="headerlink" href="#working-hours-cli" title="Permalink to this heading"></a></h1>
 <p>An extremely simple-to-use command-line interface built to remove the stress of logging working hours, keeping track of completed payable tasks, and referencing deliverables. Simply <code class="docutils literal notranslate"><span class="pre">clockin</span></code> to your task, complete it, and <code class="docutils literal notranslate"><span class="pre">clockout</span></code>, and the rest is taken care of. Of course, that’s just the bare-bones functionality… A heap of features await you.</p>
@@ -109,7 +111,7 @@ python3.10 <span class="s2">&quot;/home/path/to/Working Hours CLI/main.py&quot;<
 </section>
 <section id="usage-and-behavior">
 <h2>Usage and Behavior<a class="headerlink" href="#usage-and-behavior" title="Permalink to this heading"></a></h2>
-<p>The CLI interacts with a Deta database whose credentials are supplied by a project key provided in <code class="docutils literal notranslate"><span class="pre">_keys.py</span></code> (see <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_keys</span> <span class="pre">(sample).py</span></code></span>), in the same directory as <code class="docutils literal notranslate"><span class="pre">main.py</span></code>.</p>
+<p>The CLI interacts with a Deta database whose credentials are supplied by a project key provided in <code class="docutils literal notranslate"><span class="pre">keys.ini</span></code> (see <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">keys</span> <span class="pre">(sample).ini</span></code></span>), in the same directory as <code class="docutils literal notranslate"><span class="pre">main.py</span></code>.</p>
 <p>A separate database is automatically created and used for every month. This allows you to generate PDF reports for any current or historical month.</p>
 <p>Whenever a new item is added to the database, using <code class="docutils literal notranslate"><span class="pre">clockin</span></code>, the item is assigned a unique random string <code class="docutils literal notranslate"><span class="pre">key</span></code>. If you try to run a command (ex. <code class="docutils literal notranslate"><span class="pre">deliverable</span> <span class="pre">&quot;a</span> <span class="pre">task&quot;</span></code> to view the deliverable of task “a task,” and there are multiple tasks named “a task,” the CLI will print all items (including their keys) and prompt you to rerun the command but append <code class="docutils literal notranslate"><span class="pre">--key</span> <span class="pre">KEY</span></code>, where KEY is the key printed beside the name of an item.</p>
 <p>In the specific circumstance that you’re clocking out of a task whose name is shared by other tasks, if only one occurrence of all the tasks with that name is <em>unfinished</em>, you’ll automatically be clocked out of that unfinished task, without the need for manually providing a <code class="docutils literal notranslate"><span class="pre">key</span></code> as explained above.</p>
