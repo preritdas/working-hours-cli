@@ -284,6 +284,22 @@ python3.10 <span class="s2">&quot;Users/yourname/Documents/working-hours-cli/mai
 </div>
 <p>This script will work on Mac or Linux. Give it no extension, with the name of the alias you want to use for the CLI (I use <code class="docutils literal notranslate"><span class="pre">loghours</span></code>). So, save the file as <code class="docutils literal notranslate"><span class="pre">loghours</span></code> with no extension. It needs to be in a folder on your PATH, so either stick it in the <code class="docutils literal notranslate"><span class="pre">~/bin/</span></code> folder or create a folder and add it to PATH.</p>
 <p>Now, you can use <code class="docutils literal notranslate"><span class="pre">loghours</span></code> to interface with the CLI, as you saw in the CLI Reference.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">loghours log</span>
+
+<span class="go">loghours clockin &quot;new task&quot;</span>
+<span class="go">loghours clockout --deliver &quot;All the work.&quot;</span>
+<span class="go">loghours clockin &quot;started earlier&quot; --hours 2 </span>
+
+<span class="go">loghours delivery &quot;new task&quot;</span>
+<span class="go">loghours pickup &quot;new task&quot;</span>
+<span class="go">loghours clockout</span>
+
+<span class="go">loghours previewmonth 8-2022</span>
+<span class="go">loghours export 8-2022</span>
+
+<span class="go">loghours totalhours --payrate 30</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>

@@ -155,3 +155,21 @@ python3.10 "Users/yourname/Documents/working-hours-cli/main.py" "$@"
 This script will work on Mac or Linux. Give it no extension, with the name of the alias you want to use for the CLI (I use `loghours`). So, save the file as `loghours` with no extension. It needs to be in a folder on your PATH, so either stick it in the `~/bin/` folder or create a folder and add it to PATH.
 
 Now, you can use `loghours` to interface with the CLI, as you saw in the CLI Reference. 
+
+```console
+
+loghours log
+
+loghours clockin "new task"
+loghours clockout --deliver "All the work."
+loghours clockin "started earlier" --hours 2 
+
+loghours delivery "new task"
+loghours pickup "new task"
+loghours clockout
+
+loghours previewmonth 8-2022
+loghours export 8-2022
+
+loghours totalhours --payrate 30
+```
