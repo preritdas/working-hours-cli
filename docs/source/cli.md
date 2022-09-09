@@ -1,4 +1,4 @@
-# `loghours`
+# CLI Reference
 
 A simple-to-use command-line interface built to remove the stress of logging working hours, keeping track of completed payable tasks, and referencing deliverables.
 
