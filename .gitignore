@@ -1,0 +1,6 @@
+venv/
+win_venv/
+_keys.py
+keys.ini
+__pycache__/
+.coverage
