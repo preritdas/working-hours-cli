@@ -1,7 +1,7 @@
 Welcome to the Working Hours CLI docs.
 
 ```{toctree}
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: 'Usage and Guides'
 
 cli
