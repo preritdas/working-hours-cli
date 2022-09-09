@@ -1,5 +1,9 @@
 # Getting Started
 
+```{note}
+
+A basic understanding of Python and the console would be useful, as we'll be adding a script to PATH, installing Python, dealing with its aliases, and working with `pip`. 
+```
 
 Setting up the CLI takes just a few steps.
 
@@ -73,17 +77,21 @@ Don't include quotes or backslashes for raw characters. The file is parsed raw, 
 
 ## Requirements
 
+
 You'll need to have Python 3.10 on your system. If you don't already, the easiest installation methods are below.
 
-### macOS 
+`````{tabs}
+
+````{tab} macOS 
 
 Use Homebrew.
 
 ```console
 brew install python@3.10
 ```
+````
 
-### Windows
+````{tab} Windows
 
 Download the executable installer from [python.org](https://python.org). Make sure you add Python to your PATH (an option in the installer), and take note of what the alias is (most likely `python`.)
 
@@ -94,10 +102,13 @@ pip list
 python -m pip list
 python3.10 -m pip list
 ```
+````
 
 If none of these show you a list of packages, download [this file](https://bootstrap.pypa.io/get-pip.py) and run it with Python 3.10. 
 
-### Linux
+````{tab} Linux
+
+Use `apt` and the `deadsnakes/ppa` repository.
 
 ```console
 sudo apt update && sudo apt -y upgrade && sudo apt autoremove -y
@@ -119,10 +130,11 @@ If not, run the following script.
 
 ```console
 curl https://bootstrap.pypa.io/get-pip.py | python
-```
+````
 
 Make sure to replace `python` above with your correct Python 3.10 alias. It could also be `python3` or `python3.10`. 
-
+```
+`````
 ### Packages
 
 Once you have Python installed, from within the repository folder you cloned earlier, run `pip install -r requirements.txt` (replacing `pip` with your `pip` alias, which could also be `pip3`, and if those don't work, extend from your Python alias, ex. `python -m pip install -r requirements.txt` replacing `python` with your Python alias).
@@ -142,4 +154,4 @@ python3.10 "Users/yourname/Documents/working-hours-cli/main.py" "$@"
 
 This script will work on Mac or Linux. Give it no extension, with the name of the alias you want to use for the CLI (I use `loghours`). So, save the file as `loghours` with no extension. It needs to be in a folder on your PATH, so either stick it in the `~/bin/` folder or create a folder and add it to PATH.
 
-Now, you can use `loghours` to interface with the CLI, as you saw in the {ref}`cli`. 
+Now, you can use `loghours` to interface with the CLI, as you saw in the CLI Reference. 
