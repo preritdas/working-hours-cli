@@ -5,6 +5,7 @@ Welcome to the Working Hours CLI docs.
    :caption: 'Usage and Guides'
 
 cli
+gettingstarted
 ```
 
 ```{include} ../../README.md
