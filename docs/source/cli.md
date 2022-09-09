@@ -155,6 +155,9 @@ Output files are automatically zipped together into a .zip archive called
 that can be forwarded to anyone. When unzipped, it contains all export files,
 including the PDF report and CSV full list of all logged tasks.
 
+If no optional path is provided, the files are exported to the current working
+directory (of your console session).
+
 **Usage**:
 
 ```console
@@ -167,6 +170,7 @@ $ loghours export [OPTIONS] MONTHYEAR
 
 **Options**:
 
+* `--path TEXT`: Absolute path to the folder in which to export your documents.  [required]
 * `--help`: Show this message and exit.
 
 ## `loghours log`
