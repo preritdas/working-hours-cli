@@ -65,4 +65,4 @@ jobs:
           git commit -m "Build documentation."
       
       - name: Push changes
-        run: git push
+        run: git fetch && git pull && git push
