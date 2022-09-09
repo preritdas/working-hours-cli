@@ -171,7 +171,7 @@ $ loghours export [OPTIONS] MONTHYEAR
 
 ## `loghours log`
 
-Displays a full log of all work hours.
+Displays a full log of all work hours. Doc test.
 
 **Usage**:
 
