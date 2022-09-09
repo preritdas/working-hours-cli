@@ -31,9 +31,9 @@ jobs:
       - name: Inject API keys
         uses: knicknic/os-specific-run@v1.0.3
         with:
-          linux: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
-          macos: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
-          windows: New-Item "_keys.py" -ItemType File -Value "${{ secrets._KEYS_PY }}"
+          linux: echo -en "${{ secrets.KEYS_INI }}" >> keys.ini
+          macos: echo -en "${{ secrets.KEYS_INI }}" >> keys.ini
+          windows: New-Item "keys.ini" -ItemType File -Value "${{ secrets.KEYS_INI }}"
 
       - name: Install test dependencies
         run: pip install pytest-cov coverage-badge

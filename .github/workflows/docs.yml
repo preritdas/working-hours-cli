@@ -35,7 +35,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Inject keys
-        run: echo -en "${{ secrets._KEYS_PY }}" >> _keys.py
+        run: echo -en "${{ secrets.KEYS_INI }}" >> keys.ini
 
       - name: Build CLI reference
         run: |
