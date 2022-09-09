@@ -42,7 +42,7 @@ app = typer.Typer(
     help = (
         "A simple-to-use command-line interface built to remove the stress of logging "
         "working hours, keeping track of completed payable tasks, "
-        "and referencing deliverables."
+        "and referencing deliverables." 
     )
 )
 
