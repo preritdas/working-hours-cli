@@ -6,7 +6,11 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - master
-  workflow_run: docs
+  workflow_run:
+    workflows: ["docs"]
+    branches: ["master"]
+    types:
+      - completed
 
 jobs:
   build_and_deploy:
