@@ -171,7 +171,7 @@ def _query_db(
 
 @app.command()
 def log():
-    """Displays a full log of all work hours."""
+    """Displays a full log of all work hours. Doc test."""
     items = work_log.fetch().items
     if len(items) == 0:
         console.print("")
