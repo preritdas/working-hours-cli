@@ -7,7 +7,7 @@ import os  # join paths
 import datetime as dt
 
 # Project modules
-import _keys
+import keys
 
 
 # Initialize config
@@ -47,7 +47,7 @@ class Config:
 
     # Smart capitalization - RapidAPI
     smart_cap_preference = config['General']['smart_capitalization'].lower()
-    if smart_cap_preference == 'true' and not _keys.RapidAPI.api_key:
+    if smart_cap_preference == 'true' and not keys.RapidAPI.api_key:
         raise Exception(
             "If you have smart capitalization enabled, you must "
             "provide your RapidAPI API key and subscribe to the "

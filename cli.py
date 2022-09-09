@@ -9,7 +9,7 @@ import deta  # database
 import datetime as dt  # current time and time calculations
 
 # Project modules
-import _keys  # deta auth
+import keys  # deta auth
 from display import display_tasks, console  # printing tasks
 from config import Config
 from export import export_tasks  # exporting tasks to csv
@@ -20,7 +20,7 @@ from rich import traceback; traceback.install()
 
 
 # Deta
-deta_client = deta.Deta(_keys.Deta.project_key)
+deta_client = deta.Deta(keys.Deta.project_key)
 work_log = deta_client.Base(Config.current_db)
 
 

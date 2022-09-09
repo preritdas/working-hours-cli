@@ -34,7 +34,7 @@ I then added the script's directory to $PATH and gave it executable permissions 
 
 ## Usage and Behavior
 
-The CLI interacts with a Deta database whose credentials are supplied by a project key provided in `_keys.py` (see [`_keys (sample).py`](_keys%20(sample).py)), in the same directory as `main.py`. 
+The CLI interacts with a Deta database whose credentials are supplied by a project key provided in `keys.ini` (see [`keys (sample).ini`](keys%20(sample).ini)), in the same directory as `main.py`. 
 
 A separate database is automatically created and used for every month. This allows you to generate PDF reports for any current or historical month. 
 

@@ -8,7 +8,7 @@ import requests
 import enum
 
 # Project modules
-import _keys 
+import keys 
 from config import Config
 
 
@@ -44,7 +44,7 @@ def capitalize_title(title: str, method_force: str = None) -> str:
     # Make the request
     url = f"https://capitalize-my-title.p.rapidapi.com/title/{title}"
     headers = {
-        "X-RapidAPI-Key": _keys.RapidAPI.api_key,
+        "X-RapidAPI-Key": keys.RapidAPI.api_key,
         "X-RapidAPI-Host": "capitalize-my-title.p.rapidapi.com"
     }
     response = requests.request("GET", url, headers=headers)

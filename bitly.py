@@ -1,5 +1,5 @@
 import requests
-import _keys
+import keys
 
 
 def bitly(long_link: str) -> str:
@@ -8,7 +8,7 @@ def bitly(long_link: str) -> str:
         raise Exception("You must provide a string.")
 
     headers = {
-        'Authorization': f'Bearer {_keys.Bitly.access_token}',
+        'Authorization': f'Bearer {keys.Bitly.access_token}',
         'Content-Type': 'application/json'
     }
 
