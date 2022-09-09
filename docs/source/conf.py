@@ -16,7 +16,8 @@ release = '2.1.0'
 
 extensions = [
     "myst_parser",
-    "sphinx_rtd_theme"
+    "sphinx_rtd_theme",
+    "sphinx_tabs.tabs"
 ]
 
 templates_path = ['_templates']
