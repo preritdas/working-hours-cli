@@ -173,3 +173,6 @@ loghours export 8-2022
 
 loghours totalhours --payrate 30
 ```
+
+
+This is supposedly a link to {doc}`index`.
