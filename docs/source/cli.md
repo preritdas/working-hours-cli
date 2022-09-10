@@ -57,9 +57,9 @@ $ loghours clockin [OPTIONS] TASK
 
 **Options**:
 
-* `--hours FLOAT`: Log a completed task that took this many hours.  [required]
-* `--date TEXT`: Force date. Use this is if you started but forgot to clock in.  [required]
-* `--titlecase / --no-titlecase`: Override auto titlecasing. Makes future reference harder.  [required]
+* `--hours FLOAT`: Log a completed task that took this many hours.
+* `--date TEXT`: Force date. Use this is if you started but forgot to clock in.
+* `--titlecase / --no-titlecase`: Override auto titlecasing. Makes future reference harder.
 * `--help`: Show this message and exit.
 
 ## `loghours clockout`
@@ -83,9 +83,9 @@ $ loghours clockout [OPTIONS]
 
 **Options**:
 
-* `--hours FLOAT`: Force the number of hours worked.  [required]
-* `--deliver TEXT`: Add a deliverable item.  [required]
-* `--key TEXT`: Unique database key if prompted by CLI.  [required]
+* `--hours FLOAT`: Force the number of hours worked.
+* `--deliver TEXT`: Add a deliverable item.
+* `--key TEXT`: Unique database key if prompted by CLI.
 * `--help`: Show this message and exit.
 
 ## `loghours deliver`
@@ -109,7 +109,7 @@ $ loghours deliver [OPTIONS] TASK ITEM
 
 **Options**:
 
-* `--key TEXT`: Unique database key, if prompted by the CLI.  [required]
+* `--key TEXT`: Unique database key, if prompted by the CLI.
 * `--help`: Show this message and exit.
 
 ## `loghours deliverable`
@@ -131,7 +131,7 @@ $ loghours deliverable [OPTIONS] TASK
 
 **Options**:
 
-* `--key TEXT`: Unique database key, if prompted by the CLI.  [required]
+* `--key TEXT`: Unique database key, if prompted by the CLI.
 * `--help`: Show this message and exit.
 
 ## `loghours export`
@@ -170,7 +170,7 @@ $ loghours export [OPTIONS] MONTHYEAR
 
 **Options**:
 
-* `--path TEXT`: Absolute path to the folder in which to export your documents.  [required]
+* `--path TEXT`: Absolute path to the folder in which to export your documents.
 * `--help`: Show this message and exit.
 
 ## `loghours log`
@@ -214,7 +214,7 @@ $ loghours modify [OPTIONS] TASK ITEM VALUE
 
 **Options**:
 
-* `--key TEXT`: Unique database key, if prompted by the CLI.  [required]
+* `--key TEXT`: Unique database key, if prompted by the CLI.
 * `--help`: Show this message and exit.
 
 ## `loghours pickup`
@@ -239,7 +239,7 @@ $ loghours pickup [OPTIONS] TASK
 
 **Options**:
 
-* `--key TEXT`: Unique database key, if prompted by the CLI.  [required]
+* `--key TEXT`: Unique database key, if prompted by the CLI.
 * `--help`: Show this message and exit.
 
 ## `loghours previewmonth`
@@ -305,5 +305,5 @@ $ loghours totalhours [OPTIONS]
 
 **Options**:
 
-* `--payrate FLOAT`: Your hourly wage.  [required]
+* `--payrate FLOAT`: Your hourly wage.
 * `--help`: Show this message and exit.
