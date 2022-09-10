@@ -238,15 +238,15 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">brew install python@3.10</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><p>Download the executable installer from <a class="reference external" href="https://python.org">python.org</a>. Make sure you add Python to your PATH (an option in the installer), and take note of what the alias is (most likely <code class="docutils literal notranslate"><span class="pre">python</span></code>.)</p>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><p>Download the executable installer from <a class="reference external" href="https://python.org">python.org</a>. Make sure you add Python to your PATH (an option in the installer), and take note of what the alias is (most likely <code class="docutils literal notranslate"><span class="pre">python</span></code>).</p>
 <p>Check if <code class="docutils literal notranslate"><span class="pre">pip</span></code> works.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip list</span>
 <span class="go">python -m pip list</span>
 <span class="go">python3.10 -m pip list</span>
 </pre></div>
 </div>
-</div><p>If none of these show you a list of packages, download <a class="reference external" href="https://bootstrap.pypa.io/get-pip.py">this file</a> and run it with Python 3.10.</p>
-<div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><p>Use <code class="docutils literal notranslate"><span class="pre">apt</span></code> and the <code class="docutils literal notranslate"><span class="pre">deadsnakes/ppa</span></code> repository.</p>
+<p>If none of these show you a list of packages, download <a class="reference external" href="https://bootstrap.pypa.io/get-pip.py">this file</a> and run it with Python 3.10.</p>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><p>Use <code class="docutils literal notranslate"><span class="pre">apt</span></code> and the <code class="docutils literal notranslate"><span class="pre">deadsnakes/ppa</span></code> repository.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt update &amp;&amp; sudo apt -y upgrade &amp;&amp; sudo apt autoremove -y</span>
 <span class="go">sudo add-apt-repository ppa:deadsnakes/ppa</span>
 <span class="go">sudo apt-get install -y python3.10</span>

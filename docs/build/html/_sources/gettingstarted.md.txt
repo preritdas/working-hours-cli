@@ -93,7 +93,7 @@ brew install python@3.10
 
 ````{tab} Windows
 
-Download the executable installer from [python.org](https://python.org). Make sure you add Python to your PATH (an option in the installer), and take note of what the alias is (most likely `python`.)
+Download the executable installer from [python.org](https://python.org). Make sure you add Python to your PATH (an option in the installer), and take note of what the alias is (most likely `python`).
 
 Check if `pip` works.
 
@@ -102,9 +102,9 @@ pip list
 python -m pip list
 python3.10 -m pip list
 ```
-````
 
 If none of these show you a list of packages, download [this file](https://bootstrap.pypa.io/get-pip.py) and run it with Python 3.10. 
+````
 
 ````{tab} Linux
 
