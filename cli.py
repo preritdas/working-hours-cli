@@ -192,15 +192,15 @@ def clockin(
         help = "Name of the task you want to clock in."
     ), 
     hours: float = typer.Option(
-        ...,
+        None,
         help = "Log a completed task that took this many hours."
     ), 
     date: str = typer.Option(
-        ...,
+        None, 
         help = "Force date. Use this is if you started but forgot to clock in."
     ), 
     titlecase: bool = typer.Option(
-        ...,
+        None,
         help = "Override auto titlecasing. Makes future reference harder."
     )
 ):
@@ -292,15 +292,15 @@ def clockin(
 @app.command()
 def clockout(
     hours: float = typer.Option(
-        ...,
+        None,
         help = "Force the number of hours worked."
     ), 
     deliver: str = typer.Option(
-        ...,
+        None,
         help = "Add a deliverable item."
     ),
     key: str = typer.Option(
-        ...,
+        None,
         help = "Unique database key if prompted by CLI."
     ), 
 ):
@@ -362,7 +362,7 @@ def pickup(
         help = "Name of the task you want to pick up."
     ), 
     key: str = typer.Option(
-        ...,
+        None,
         help = "Unique database key, if prompted by the CLI."
     )
 ):
@@ -413,7 +413,7 @@ def removetask(key: str = typer.Argument(..., help="Task unique database key."))
 
 
 @app.command()
-def totalhours(payrate: float = typer.Option(..., help="Your hourly wage.")):
+def totalhours(payrate: float = typer.Option(None, help="Your hourly wage.")):
     """
     Calculates the total hours worked on all tasks.
 
@@ -453,7 +453,7 @@ def deliver(
         help = "Note, result, reference, or link to the deliverable."
     ), 
     key: str = typer.Option(
-        ...,
+        None, 
         help = "Unique database key, if prompted by the CLI."
     )
 ):
@@ -487,7 +487,7 @@ def deliverable(
         help = "Name of the task whose deliverable you wish to view."
     ), 
     key: str = typer.Option(
-        ...,
+        None, 
         help = "Unique database key, if prompted by the CLI."
     )
 ):
@@ -567,7 +567,7 @@ def export(
         help = "Month to preview, ex. '7-2022'."
     ),
     path: str = typer.Option(
-        ...,
+        None,
         help = "Absolute path to the folder in which to export your documents."
     )
 ):
@@ -639,7 +639,7 @@ def modify(
         help = "Value to which the property should be set."
     ), 
     key: str = typer.Option(
-        ...,
+        None,
         help = "Unique database key, if prompted by the CLI."
     )
 ):
