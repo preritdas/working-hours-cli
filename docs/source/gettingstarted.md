@@ -130,10 +130,10 @@ If not, run the following script.
 
 ```console
 curl https://bootstrap.pypa.io/get-pip.py | python
-````
+```
 
 Make sure to replace `python` above with your correct Python 3.10 alias. It could also be `python3` or `python3.10`. 
-```
+````
 `````
 ### Packages
 
