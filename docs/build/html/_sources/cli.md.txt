@@ -59,6 +59,7 @@ $ loghours clockin [OPTIONS] TASK
 
 * `--hours FLOAT`: Log a completed task that took this many hours.
 * `--date TEXT`: Force date. Use this is if you started but forgot to clock in.
+* `--deliver TEXT`: Add a delivery, typically if clocking in a past event.
 * `--titlecase / --no-titlecase`: Override auto titlecasing. Makes future reference harder.
 * `--help`: Show this message and exit.
 
