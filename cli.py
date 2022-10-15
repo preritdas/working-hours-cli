@@ -199,6 +199,10 @@ def clockin(
         None, 
         help = "Force date. Use this is if you started but forgot to clock in."
     ), 
+    deliver: str = typer.Option(
+        None,
+        help = "Add a delivery, typically if clocking in a past event."
+    ),
     titlecase: bool = typer.Option(
         None,
         help = "Override auto titlecasing. Makes future reference harder."
@@ -264,6 +268,7 @@ def clockin(
             f"Logging [{Config.colors['task']}]{task}[/{Config.colors['task']}] for "
             f"[{Config.colors['hours']}]{hours}[/{Config.colors['hours']}] hours, "
             f"starting at [{Config.colors['date']}]{date}[/{Config.colors['date']}]. "
+            f"{'Your delivery has been added.' if deliver else ''}"
         )
     else:
         raise Exception("Don't know what to do in this case.")
@@ -282,7 +287,7 @@ def clockin(
             "Date": date,
             "Task": task,
             "Hours": hours,
-            "Deliverable": None
+            "Deliverable": deliver
         }
     )
 
