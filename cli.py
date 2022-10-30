@@ -617,7 +617,7 @@ def export(
             console.print("")
             return
 
-        path = export_tasks(items, monthyear=monthyear)
+        path = export_tasks(items, monthyear=monthyear, path=path)
 
     console.print(
         f"\nYour log has been exported to the current directory in PDF and CSV, "

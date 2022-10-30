@@ -3,6 +3,7 @@ import pandas as pd
 
 # Local imports
 import os
+import pathlib
 import zipfile
 
 # Project modules
@@ -12,7 +13,7 @@ from display import _reorder_dicts
 from bitly import bitly
 
 
-def export_tasks(tasks: list[dict], monthyear: str, path: str = None) -> str:
+def export_tasks(tasks: list[dict], monthyear: str, path: str = "") -> str:
     """
     Takes a list of tasks (dicts) and exports them to a CSV.
 
@@ -39,7 +40,13 @@ def export_tasks(tasks: list[dict], monthyear: str, path: str = None) -> str:
             task['Hours'] = 0
     
     base_name = f"Work Log {monthyear}"
-    path = path or os.path.join(os.getcwd(), base_name)
+
+    path = path or os.getcwd()
+
+    # if not pathlib.Path(path).exists:
+    #     os.mkdir(path)
+
+    path = os.path.join(path, base_name)
 
     # Store CSV before changing values
     pd.DataFrame(tasks).to_csv(f"{path}.csv")
@@ -48,9 +55,9 @@ def export_tasks(tasks: list[dict], monthyear: str, path: str = None) -> str:
     create_pdf(tasks, monthyear, f"{path}.pdf")
 
     # Zip resulting files
-    with zipfile.ZipFile(os.path.join(os.getcwd(), f"{base_name}.zip"), "w") as archive:
-        archive.write(f"Work Log {monthyear}.csv")
-        archive.write(f"Work Log {monthyear}.pdf")
+    with zipfile.ZipFile(f"{path}.zip", "w") as archive:
+        archive.write(f"{path}.csv")
+        archive.write(f"{path}.pdf")
 
     return path
 
