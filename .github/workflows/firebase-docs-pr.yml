@@ -2,9 +2,12 @@
 # https://github.com/firebase/firebase-tools
 
 name: pr docs preview
-'on': pull_request
+
+on: pull_request
+
 jobs:
   build:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
 
     steps:
@@ -39,12 +42,8 @@ jobs:
       - name: Build documentation 
         run: cd docs && make html && cd ..
 
-  preview:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Push docs to Firebase preview channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WORKING_HOURS_CLI }}'
