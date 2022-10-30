@@ -15,4 +15,9 @@ def bitly(long_link: str) -> str:
     data = ' {"long_url": "' + long_link + '" } '
     
     response = requests.post(url="https://api-ssl.bitly.com/v4/shorten", headers=headers, data=data)
+
+    if response.status_code != 200:
+        return long_link
+
     return response.json()['link']
+
