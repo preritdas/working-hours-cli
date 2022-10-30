@@ -4,15 +4,14 @@ on:
   push:
     paths:
       - "*/**/*.md"
-      - "docs/source/*"
+      - "docs/source/**/*"
       - "cli.py"
       - ".github/workflows/docs.yml"
-  pull_request:
   workflow_dispatch:
 
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
