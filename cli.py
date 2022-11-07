@@ -193,15 +193,18 @@ def clockin(
     ), 
     hours: float = typer.Option(
         None,
-        help = "Log a completed task that took this many hours."
+        help = "Log a completed task that took this many hours.",
+        prompt = "How many hours? (Type '0' if task is active)"
     ), 
     date: str = typer.Option(
         None, 
-        help = "Force date. Use this is if you started but forgot to clock in."
+        help = "Force date. Use this is if you started but forgot to clock in.",
+        prompt = "What date and time? (Enter 'no' if not forcing)"
     ), 
     deliver: str = typer.Option(
         None,
-        help = "Add a delivery, typically if clocking in a past event."
+        help = "Add a delivery, typically if clocking in a past event.",
+        prompt = "Deliverable? (Enter 'no' if none)"
     ),
     titlecase: bool = typer.Option(
         None,
@@ -228,6 +231,11 @@ def clockin(
     """
     # If not explicitly false, use title case
     task = utils.capitalize_title(task) if titlecase else task
+
+    # Handle optional prompts
+    if hours == 0: hours = None
+    if date.lower().strip() == "no": date = None
+    if deliver.lower().strip() == "no": deliver = None
 
     # Check for multiple unfinished tasks
     tasks = work_log.fetch(
